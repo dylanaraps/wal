@@ -23,6 +23,7 @@ get_colors() {
     else
         colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
 
+        # Cache the scheme
         mkdir -p "${temp_dir}"
         printf "%s\n" "${colors[@]}" > "$temp_file"
     fi
@@ -81,7 +82,6 @@ send_sequences() {
 reload_env() {
     # Reload i3
     i3-msg reload >/dev/null &
-
 
     # Reload lemonbar
     pkill bar
