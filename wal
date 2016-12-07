@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+#
+# Select a random wallpaper from a directory, generate a colorscheme from it and then update the terminal colorscheme on the fly.
+#
+# Depends on: feh, imagemagick
+
+# Options
+wal_dir="$HOME/Pictures/Wallpapers"
+temp_dir="$HOME/.cache/wal/schemes"
+newline=$'\n'
+
+get_wall() {
+    if [[ -d "$wal_dir" && -z "$wal" ]]; then
+        files=("${wal_dir%/}"/*.{png,jpg,jpeg})
+        wal="$(printf "%s" "${files[RANDOM % (${#files[@]} - 1)]}")"
+    fi
+}
+
+get_colors() {
+    temp_file="${temp_dir}/${wal//\/}"
+
+    if [[ -f "$temp_file" ]]; then
+        colors=($(< "$temp_file"))
+    else
+        colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
+
+        mkdir -p "${temp_dir}"
+        printf "%s\n" "${colors[@]}" > "$temp_file"
+    fi
+}
+
+set_color() {
+    sequences+="\033]4;${1};${2}\007"
+    x_colors+="*color${1}: ${2}${newline}"
+}
+
+set_special() {
+    sequences+="\033]${1};${2}\007"
+
+    # Set X colors
+    case "$1" in
+        10) x_colors+="*foreground: ${2}${newline}" ;;
+        11) x_colors+="*background: ${2}${newline}" ;;
+        12) x_colors+="*cursor: ${2}${newline}" ;;
+    esac
+}
+
+create_sequences() {
+    set_special 10  "${colors[15]}"
+    set_special 11  "${colors[0]}"
+    set_special 12  "${colors[15]}"
+    set_special 13  "${colors[15]}"
+    set_special 14  "${colors[0]}"
+    set_special 708 "${colors[0]}"
+
+    set_color 0  "${colors[0]}"
+    set_color 1  "${colors[9]}"
+    set_color 2  "${colors[10]}"
+    set_color 3  "${colors[11]}"
+    set_color 4  "${colors[12]}"
+    set_color 5  "${colors[13]}"
+    set_color 6  "${colors[14]}"
+    set_color 7  "${colors[15]}"
+    set_color 8  "${colors[8]}"
+    set_color 9  "${colors[9]}"
+    set_color 10 "${colors[10]}"
+    set_color 11 "${colors[11]}"
+    set_color 12 "${colors[12]}"
+    set_color 13 "${colors[13]}"
+    set_color 14 "${colors[14]}"
+    set_color 15 "${colors[15]}"
+}
+
+send_sequences() {
+    create_sequences
+
+
+    for term in /dev/pts/[0-9]*; do
+        printf "%b" "$sequences" > "$term" &
+    done
+}
+
+set_xresources() {
+    # Save the colorscheme so new terminals also use it.
+    xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
+}
+
+get_args() {
+    while [[ "$1" ]]; do
+        case "$1" in
+            "-c") rm -rf "$temp_dir" ;;
+            "-i") wal="$2" ;;
+        esac
+
+        shift
+    done
+}
+
+reload_env() {
+    # Reload i3
+    i3-msg reload >/dev/null &
+
+    # Reload lemonbar
+    bar "${colors[15]}" "${colors[0]}" && pkill bar &
+
+    # Reload dunst
+    pkill dunst
+    dunst -lb "${colors[15]}" -nb "${colors[15]}" -cb "${colors[15]}" -lf "${colors[0]}" -bf "${colors[0]}" -cf "${colors[9]}"
+}
+
+main () {
+    get_args "$@"
+    get_wall
+    get_colors
+    create_sequences
+    send_sequences
+    feh --bg-fill "$wal" &
+    set_xresources
+    reload_env &
+}
+
+main "$@" >/dev/null 2>&1
