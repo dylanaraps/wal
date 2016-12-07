@@ -4,6 +4,12 @@
 #
 # Depends on: feh, imagemagick
 
+# Speed up script by not using unicode
+export LC_ALL=C
+export LANG=C
+
+shopt -s nullglob nocasematch
+
 # Options
 wal="$HOME/Pictures/Wallpapers"
 temp_dir="$HOME/.cache/wal/schemes"
@@ -13,7 +19,7 @@ get_colors() {
     # Shuffle the image
     if [[ -d "$wal" ]]; then
         files=("${wal%/}"/*.{png,jpg,jpeg})
-        wal="${files[RANDOM % (${#files[@]} - 1)]}"
+        wal="${files[RANDOM % ${#files[@]}]}"
     fi
 
     temp_file="${temp_dir}/${wal//\/}"
@@ -98,6 +104,36 @@ reload_env() {
         -cf "${colors[9]}" &
 }
 
+get_de() {
+    # Taken from Neofetch.
+    de="${XDG_CURRENT_DESKTOP}"
+
+    # Fallback to using xprop.
+    [[ -n "$DISPLAY" && -z "$de" ]] && \
+        de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
+}
+
+set_wallpaper() {
+    get_de
+
+    case "$de" in
+        *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "$wal" ;;
+        *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
+        *"XFCE"*) xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" ;;
+        *)
+            if type -p feh >/dev/null; then
+                feh --bg-fill "$wal"
+
+            elif type -p nitrogen >/dev/null; then
+                nitrogen --set-zoom-fill "$wal"
+
+            else
+                gsettings set org.gnome.desktop.background picture-uri "$wal"
+            fi
+        ;;
+    esac
+}
+
 get_args() {
     while getopts ":ci:" opt; do
         case "$opt" in
@@ -138,8 +174,7 @@ main () {
     send_sequences
 
     # Set the wallpaper.
-    # TODO Auto detect setter.
-    feh --bg-fill "$wal" &
+    set_wallpaper &
 
     # Save the colorscheme to the Xresources db.
     xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
