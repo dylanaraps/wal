@@ -5,18 +5,17 @@
 # Depends on: feh, imagemagick
 
 # Options
-wal_dir="$HOME/Pictures/Wallpapers"
+wal="$HOME/Pictures/Wallpapers"
 temp_dir="$HOME/.cache/wal/schemes"
 newline=$'\n'
 
-get_wall() {
-    if [[ -d "$wal_dir" && -z "$wal" ]]; then
-        files=("${wal_dir%/}"/*.{png,jpg,jpeg})
-        wal="$(printf "%s" "${files[RANDOM % (${#files[@]} - 1)]}")"
-    fi
-}
-
 get_colors() {
+    # Shuffle the image
+    if [[ -d "$wal" ]]; then
+        files=("${wal%/}"/*.{png,jpg,jpeg})
+        wal="${files[RANDOM % (${#files[@]} - 1)]}"
+    fi
+
     temp_file="${temp_dir}/${wal//\/}"
 
     if [[ -f "$temp_file" ]]; then
@@ -88,7 +87,16 @@ get_args() {
     while getopts ":ci:" opt; do
         case "$opt" in
             "c") rm -rf "$temp_dir" ;;
-            "i") wal="$OPTARG" ;;
+            "i")
+                if [[ -d "$OPTARG" || -f "$OPTARG" ]]; then
+                    wal="$OPTARG"
+
+                else
+                    printf "%s\n" "Image/Directory doesn't exist: $OPTARG" >&2
+                    exit 1
+                fi
+            ;;
+
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2
                 exit 1
@@ -106,17 +114,17 @@ reload_env() {
     # Reload i3
     i3-msg reload >/dev/null &
 
+    pkill dunst bar
+
     # Reload lemonbar
-    bar "${colors[15]}" "${colors[0]}" && pkill bar &
+    bar "${colors[15]}" "${colors[0]}"
 
     # Reload dunst
-    pkill dunst
     dunst -lb "${colors[15]}" -nb "${colors[15]}" -cb "${colors[15]}" -lf "${colors[0]}" -bf "${colors[0]}" -cf "${colors[9]}"
 }
 
 main () {
     get_args "$@"
-    get_wall
     get_colors
     create_sequences
     send_sequences
