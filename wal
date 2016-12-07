@@ -85,7 +85,7 @@ reload_env() {
 
     # Reload lemonbar
     pkill bar
-    bar "${colors[15]}" "${colors[0]}"
+    bar "${colors[15]}" "${colors[0]}" &
 
     # Reload dunst
     pkill dunst
@@ -95,7 +95,7 @@ reload_env() {
         -cb "${colors[15]}" \
         -lf "${colors[0]}"  \
         -bf "${colors[0]}"  \
-        -cf "${colors[9]}"
+        -cf "${colors[9]}" &
 }
 
 get_args() {
@@ -143,7 +143,7 @@ main () {
 
     # Save the colorscheme to the Xresources db.
     xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
-    reload_env >/dev/null 2>&1 &
+    reload_env >/dev/null 2>&1
 }
 
 main "$@"
