@@ -78,8 +78,17 @@ send_sequences() {
     done
 }
 
-set_xresources() {
-    # Save the colorscheme so new terminals also use it.
+reload_env() {
+    # Reload i3
+    i3-msg reload >/dev/null &
+
+    pkill dunst bar
+
+    # Reload lemonbar
+    bar "${colors[15]}" "${colors[0]}"
+
+    # Reload dunst
+    dunst -lb "${colors[15]}" -nb "${colors[15]}" -cb "${colors[15]}" -lf "${colors[0]}" -bf "${colors[0]}" -cf "${colors[9]}"
 }
 
 get_args() {
@@ -107,19 +116,6 @@ get_args() {
             ;;
         esac
     done
-}
-
-reload_env() {
-    # Reload i3
-    i3-msg reload >/dev/null &
-
-    pkill dunst bar
-
-    # Reload lemonbar
-    bar "${colors[15]}" "${colors[0]}"
-
-    # Reload dunst
-    dunst -lb "${colors[15]}" -nb "${colors[15]}" -cb "${colors[15]}" -lf "${colors[0]}" -bf "${colors[0]}" -cf "${colors[9]}"
 }
 
 main () {
