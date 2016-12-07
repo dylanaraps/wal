@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Select a random wallpaper from a directory, generate a colorscheme from it and then update the terminal colorscheme on the fly.
+# wol - Generate and change colorschemes on the fly.
 #
 # Depends on: feh, imagemagick
 
