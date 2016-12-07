@@ -89,7 +89,13 @@ reload_env() {
 
     # Reload dunst
     pkill dunst
-    dunst -lb "${colors[15]}" -nb "${colors[15]}" -cb "${colors[15]}" -lf "${colors[0]}" -bf "${colors[0]}" -cf "${colors[9]}"
+    dunst \
+        -lb "${colors[15]}" \
+        -nb "${colors[15]}" \
+        -cb "${colors[15]}" \
+        -lf "${colors[0]}"  \
+        -bf "${colors[0]}"  \
+        -cf "${colors[9]}"
 }
 
 get_args() {
