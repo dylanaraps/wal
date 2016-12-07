@@ -80,7 +80,6 @@ send_sequences() {
 
 set_xresources() {
     # Save the colorscheme so new terminals also use it.
-    xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
 }
 
 get_args() {
@@ -125,11 +124,22 @@ reload_env() {
 
 main () {
     get_args "$@"
+
+    # Get 16 unique colors from the image.
     get_colors
+
+    # Generate a pallete.
     create_sequences
+
+    # Send the color changing sequences to every open terminal emulator.
     send_sequences
+
+    # Set the wallpaper.
+    # TODO Auto detect setter.
     feh --bg-fill "$wal" &
-    set_xresources
+
+    # Save the colorscheme to the Xresources db.
+    xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
     reload_env >/dev/null 2>&1 &
 }
 
