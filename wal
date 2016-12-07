@@ -74,7 +74,6 @@ create_sequences() {
 send_sequences() {
     create_sequences
 
-
     for term in /dev/pts/[0-9]*; do
         printf "%b" "$sequences" > "$term" &
     done
@@ -86,13 +85,20 @@ set_xresources() {
 }
 
 get_args() {
-    while [[ "$1" ]]; do
-        case "$1" in
-            "-c") rm -rf "$temp_dir" ;;
-            "-i") wal="$2" ;;
-        esac
+    while getopts ":ci:" opt; do
+        case "$opt" in
+            "c") rm -rf "$temp_dir" ;;
+            "i") wal="$OPTARG" ;;
+            "?")
+                printf "%s\n" "Invalid option: -$OPTARG" >&2
+                exit 1
+            ;;
 
-        shift
+            ":")
+                printf "%s\n" "Option -$OPTARG requires an argument." >&2
+                exit 1
+            ;;
+        esac
     done
 }
 
@@ -116,7 +122,7 @@ main () {
     send_sequences
     feh --bg-fill "$wal" &
     set_xresources
-    reload_env &
+    reload_env >/dev/null 2>&1 &
 }
 
-main "$@" >/dev/null 2>&1
+main "$@"
