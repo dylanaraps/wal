@@ -4,54 +4,37 @@
 #
 # Depends on: feh, imagemagick
 
-# Speed up script by not using unicode.
+# Speed up script by not using unicode
 export LC_ALL=C
 export LANG=C
 
 shopt -s nullglob nocasematch
 
 # Options
-
-# Folder to source wallpapers from by default.
 wal="$HOME/Pictures/Wallpapers"
-
-# Cache dir
-cache_dir="$HOME/.cache/wal"
-
-# Internal variables.
+temp_dir="$HOME/.cache/wal"
 newline=$'\n'
 
-rand_img() {
-    files=("${wal%/}"/*.{png,jpg,jpeg})
-    files=("${files[@]/"$old_wall"}")
-    wal="${files[RANDOM % ${#files[@]}]}"
-
-    # If the shuffle fails (rare) set the image to the first element.
-    [[ ! -f "$wal" ]] && wal="${files[0]}"
-
-    # Cache the wallpaper name
-    printf "%s\n" "$wal" > "${cache_dir}/wal"
-}
-
 get_colors() {
-    # Create the cache dir.
-    mkdir -p "${cache_dir}/schemes"
+    # Shuffle the image
+    if [[ -d "$wal" ]]; then
+        files=("${wal%/}"/*.{png,jpg,jpeg})
+        wal="${files[RANDOM % ${#files[@]}]}"
+    fi
 
-    # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
+    temp_file="${temp_dir}/${wal//\/}"
 
-    # Shuffle the image.
-    [[ -d "$wal" ]] && rand_img
-
-    cache_file="${cache_dir}/schemes/${wal//\/}"
-
-    if [[ -f "$cache_file" ]]; then
-        colors=($(< "$cache_file"))
+    if [[ -f "$temp_file" ]]; then
+        colors=($(< "$temp_file"))
     else
         colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
 
-        # Cache the scheme.
-        printf "%s\n" "${colors[@]}" > "$cache_file"
+        # Cache the scheme
+        mkdir -p "${temp_dir}"
+        printf "%s\n" "${colors[@]}" > "$temp_file"
+
+        # Cache the wallpaper name
+        printf "%s\n" "$wal" > "${temp_dir}/wal"
     fi
 }
 
@@ -163,7 +146,7 @@ reload_env() {
 get_args() {
     while getopts ":ci:" opt; do
         case "$opt" in
-            "c") rm -rf "${cache_dir}/schemes" ;;
+            "c") rm -rf "$temp_dir" ;;
             "i")
                 if [[ -d "$OPTARG" || -f "$OPTARG" ]]; then
                     wal="$OPTARG"

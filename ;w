@@ -17,6 +17,7 @@ wal="$HOME/Pictures/Wallpapers"
 
 # Cache dir
 cache_dir="$HOME/.cache/wal"
+mkdir -p "${cache_dir}/schemes"
 
 # Internal variables.
 newline=$'\n'
@@ -34,13 +35,10 @@ rand_img() {
 }
 
 get_colors() {
-    # Create the cache dir.
-    mkdir -p "${cache_dir}/schemes"
-
     # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
+    old_wall="$(< "${cache_dir}/wal" 2>/dev/null)"
 
-    # Shuffle the image.
+    # Shuffle the image
     [[ -d "$wal" ]] && rand_img
 
     cache_file="${cache_dir}/schemes/${wal//\/}"
@@ -50,7 +48,7 @@ get_colors() {
     else
         colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
 
-        # Cache the scheme.
+        # Cache the scheme
         printf "%s\n" "${colors[@]}" > "$cache_file"
     fi
 }
@@ -163,7 +161,7 @@ reload_env() {
 get_args() {
     while getopts ":ci:" opt; do
         case "$opt" in
-            "c") rm -rf "${cache_dir}/schemes" ;;
+            "c") rm -rf "$cache_dir" ;;
             "i")
                 if [[ -d "$OPTARG" || -f "$OPTARG" ]]; then
                     wal="$OPTARG"
