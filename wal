@@ -142,7 +142,7 @@ set_wallpaper() {
         de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
 
     case "$de" in
-        *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "$wal" ;;
+        *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
         *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
         *"XFCE"*) xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" ;;
         *)
@@ -153,7 +153,7 @@ set_wallpaper() {
                 nitrogen --set-zoom-fill "$wal"
 
             else
-                gsettings set org.gnome.desktop.background picture-uri "$wal"
+                gsettings set org.gnome.desktop.background picture-uri "file://${wal}"
             fi
         ;;
     esac
