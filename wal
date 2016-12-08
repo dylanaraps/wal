@@ -45,6 +45,7 @@ get_colors() {
 
     cache_file="${cache_dir}/schemes/${wal//\/}"
 
+    # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
         colors=($(< "$cache_file"))
     else
@@ -105,17 +106,13 @@ send_sequences() {
     done
 }
 
-get_de() {
-    # Taken from Neofetch.
+set_wallpaper() {
+    # Get desktop environment.
     de="${XDG_CURRENT_DESKTOP}"
 
     # Fallback to using xprop.
     [[ -n "$DISPLAY" && -z "$de" ]] && \
         de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
-}
-
-set_wallpaper() {
-    get_de
 
     case "$de" in
         *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "$wal" ;;
@@ -158,7 +155,6 @@ reload_env() {
         -bf "${colors[0]}"  \
         -cf "${colors[9]}" &
 }
-
 
 get_args() {
     while getopts ":ci:" opt; do
