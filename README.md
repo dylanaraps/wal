@@ -48,3 +48,6 @@ client.background       $bg
 ```
 
 
+### dunst
+
+`wal` will automatically detect you're running dunst and reload it using launch flags to change the colors.
