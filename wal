@@ -100,7 +100,6 @@ send_sequences() {
     set_color 5  "${colors[13]}"
     set_color 6  "${colors[14]}"
     set_color 7  "${colors[15]}"
-    set_color 8  "${colors[7]}"
     set_color 9  "${colors[9]}"
     set_color 10 "${colors[10]}"
     set_color 11 "${colors[11]}"
@@ -108,6 +107,17 @@ send_sequences() {
     set_color 13 "${colors[13]}"
     set_color 14 "${colors[14]}"
     set_color 15 "${colors[15]}"
+
+    # Create a comment color based on the brightness of the background.
+    case "${colors[0]:1:1}" in
+        [0-1]) set_color 8 "#666666" ;;
+        2)     set_color 8 "#757575" ;;
+        [3-4]) set_color 8 "#999999" ;;
+        5)     set_color 8 "#8a8a8a" ;;
+        [6-9]) set_color 8 "#a1a1a1" ;;
+        *)     set_color 8 "${colors[7]}" ;;
+    esac
+    echo "${colors[0]:1:1}"
 
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
