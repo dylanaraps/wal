@@ -12,6 +12,7 @@
 - **[Requirements](#requirements)**
     - [Dependencies](#dependencies)
     - [Terminal Emulator](#terminal-emulator)
+- **[Usage](#usage)**
 - **[Customization](#customization)**
     - [i3](#i3)
     - [dunst](#dunst)
@@ -42,6 +43,22 @@
 - Must support these escape sequences: `\033]11;#ff0000\007`
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
 
+
+## Usage
+
+```sh
+Usage: wal [OPTION] -i '/path/to/dir'
+Example: wal -i '/home/dylan/Pictures/Wallpapers/'
+         wal -i '/home/dylan/Pictures/1.jpg'
+
+Flags:
+  -c                      Delete all cached colorschemes.
+  -h                      Display this help page.
+  -i '/path/to/dir'       Which image to use.
+     '/path/to/img.jpg'
+  -q                      Quiet mode, don't print anything.
+
+```
 
 
 ## Customization
