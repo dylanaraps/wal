@@ -25,7 +25,9 @@
 
 - `bash`
 - Colorscheme Generation: `imagemagick`
-- Wallpaper Setting: `feh`, `nitrogen` or `gsettings`.
+- Wallpaper Setting:
+    - DE: `xfce`, `gnome`, `cinnamon` `mate`
+    - Universal: `feh`, `nitrogen`
 - Desktop Environment: `xprop`
     - This is used to detect the correct wallpaper setter.
 
