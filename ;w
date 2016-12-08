@@ -87,7 +87,7 @@ create_sequences() {
     set_color 5  "${colors[13]}"
     set_color 6  "${colors[14]}"
     set_color 7  "${colors[15]}"
-    set_color 8  "${colors[7]}"
+    set_color 8  "${colors[8]}"
     set_color 9  "${colors[9]}"
     set_color 10 "${colors[10]}"
     set_color 11 "${colors[11]}"
@@ -184,9 +184,6 @@ get_args() {
             ;;
         esac
     done
-
-    # Check if -i was used.
-    [[ -z "$wal" ]] && { printf "%s\n" "Error: 'wal' must be run with '-i'" >&2; exit 1; }
 }
 
 main () {
