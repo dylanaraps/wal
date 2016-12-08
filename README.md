@@ -2,9 +2,9 @@
 
 `wal` is a script that takes an image (or a directory of images), generates a colorscheme (using `imagemagick`) and then changes all of your open terminal's colorschemes to the new colors on the fly. `wal` then caches each generated colorscheme so that cycling through wallpapers while changing colorschemes is instantaneous. `wal` finally merges the new colorscheme into the Xresources db so that any new terminal emulators you open use the new colorscheme.
 
-[Album of examples](http://imgur.com/a/IrOOe)
+[Album of examples (Warning large)](http://imgur.com/a/ttSOb)
 
-![screen](http://i.imgur.com/jvTxdD4.png)
+![screen](http://i.imgur.com/4aLsvvW.png)
 
 
 ## Table of Contents
