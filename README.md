@@ -7,6 +7,16 @@
 `wal` finally merges the new colorscheme into the Xresources db so that any new terminal emulators you open use the new colorscheme.
 
 
+## Table of Contents
+
+- **[Requirements](#requirements)**
+    - [Dependencies](#dependencies)
+    - [Terminal Emulator](#terminal-emulator)
+    - [i3](#i3)
+    - [dunst](#dunst)
+    - [vim](#vim)
+
+
 ## Requirements
 
 
