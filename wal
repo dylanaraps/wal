@@ -43,7 +43,9 @@ get_colors() {
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
 
-    cache_file="${cache_dir}/schemes/${wal//\/}"
+    # Store cached colorscheme as 'dir-to-img.jpg'
+    img_dir="$(cd "$(dirname "$wal")" && pwd -P)/${wal/*\/}"
+    cache_file="${cache_dir}/schemes/${img_dir//\//-}"
 
     # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
@@ -136,7 +138,7 @@ set_wallpaper() {
 
 export_colors() {
     # Merge the colors into the X db so new terminals use them.
-    xrdb -merge >/dev/null 2>%1 <<< "$x_colors"
+    xrdb -merge >/dev/null 2>&1 <<< "$x_colors"
 }
 
 reload_env() {
