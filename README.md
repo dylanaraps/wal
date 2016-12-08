@@ -77,7 +77,7 @@ Example:
 # Change 'color7' and 'color2' to whatever colors you want i3 to use
 # from the generated scheme.
 # NOTE: The '#f0f0f0' in the lines below is the color i3 will use if
-$ it fails to get colors from Xresources for some reason.
+# it fails to get colors from Xresources for some reason.
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 
