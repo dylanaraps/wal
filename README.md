@@ -10,14 +10,14 @@
 ## Requirements
 
 
-#### Dependencies
+### Dependencies
 
 - `bash`
 - Colorscheme Generation: `imagemagick`
 - Wallpaper Setting: `feh`, `nitrogen` or `gsettings`.
 
 
-#### Terminal Emulator
+### Terminal Emulator
 
 **Recommended:** `URxvt` or `Xterm`.
 
@@ -26,7 +26,7 @@
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
 
 
-#### i3
+### i3
 
 To use `wal` with i3 you have to make some modifications to your i3 config file.
 
