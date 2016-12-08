@@ -101,6 +101,8 @@ create_sequences() {
 send_sequences() {
     create_sequences
 
+    # Directing output to /dev/pts/* allows you to send output to all open terminals
+    # on your system.
     for term in /dev/pts/[0-9]*; do
         printf "%b" "$sequences" > "$term" &
     done
@@ -155,7 +157,7 @@ reload_env() {
 
     # Reload lemonbar
     pkill bar
-    bar "${colors[15]}" "${colors[0]}" &
+    bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
 }
 
 get_args() {
@@ -195,7 +197,7 @@ main () {
     create_sequences
 
     # Send the color changing sequences to every open terminal emulator.
-    send_sequences
+    send_sequences &
 
     # Set the wallpaper.
     set_wallpaper &

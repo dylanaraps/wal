@@ -12,6 +12,7 @@
 - **[Requirements](#requirements)**
     - [Dependencies](#dependencies)
     - [Terminal Emulator](#terminal-emulator)
+- **[Customization](#customization)**
     - [i3](#i3)
     - [dunst](#dunst)
     - [vim](#vim)
@@ -36,6 +37,10 @@
 - Colors must be set through `.Xresources`.
 - Must support these escape sequences: `\033]11;#ff0000\007`
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
+
+
+
+## Customization
 
 
 ### i3
