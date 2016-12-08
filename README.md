@@ -67,6 +67,10 @@ Flags:
 
 ## Customization
 
+See this personal script of mine that updates my lemonbar and startpage with the new colors.
+
+https://github.com/dylanaraps/bin/blob/master/wal-set
+
 
 ### i3
 
@@ -145,3 +149,21 @@ dylan ~ >echo "$color0 $color5"
 lemonbar -B "$color7" -F "$color0"
 ```
 
+
+### SCSS variables
+
+`wal` also exports the colorscheme as SCSS variables for use in webpages. I'm using this feature to update my startpage with the new colors dynamically.
+
+Example:
+
+```scss
+// Example .scss file
+
+// Import Colors
+@import '/home/dylan/.cache/wal/colors.scss';
+
+body {
+    background: $color0;
+    color: $color7;
+}
+```
