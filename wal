@@ -22,6 +22,7 @@ rand_img() {
     # Get the current wallpaper.
     old_wall="$(< "${cache_dir}/wal")"
 
+    # Shuffle the directory.
     files=("${wal%/}"/*.{png,jpg,jpeg})
     files=("${files[@]/"$old_wall"}")
     wal="${files[RANDOM % ${#files[@]}]}"
