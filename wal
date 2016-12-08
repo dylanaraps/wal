@@ -19,6 +19,9 @@ cache_dir="$HOME/.cache/wal"
 newline=$'\n'
 
 rand_img() {
+    # Get the current wallpaper.
+    old_wall="$(< "${cache_dir}/wal")"
+
     files=("${wal%/}"/*.{png,jpg,jpeg})
     files=("${files[@]/"$old_wall"}")
     wal="${files[RANDOM % ${#files[@]}]}"
@@ -34,14 +37,16 @@ get_colors() {
     # Create the cache dir.
     mkdir -p "${cache_dir}/schemes"
 
-    # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
-
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
 
+    # Check to see if wal was run from the -i dir.
+    [[ ! "${wal%/*}" =~ \/ ]] && wal_dir="."
+
+    # Find out the image's full path.
+    img_dir="$(cd "${wal_dir:-${wal%/*}}" && pwd -P)/${wal##*/}"
+
     # Store cached colorscheme as 'dir-to-img.jpg'
-    img_dir="$(cd "$(dirname "$wal")" && pwd -P)/${wal/*\/}"
     cache_file="${cache_dir}/schemes/${img_dir//\//-}"
 
     # Generate 16 colors from the image and save them to a file.
