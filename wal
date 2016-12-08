@@ -159,10 +159,25 @@ reload_env() {
     bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
 }
 
+usage() { printf "%s" "\
+Usage: wal [OPTION] -i '/path/to/dir'
+Example: wal -i '${HOME}/Pictures/Wallpapers/'
+         wal -i '${HOME}/Pictures/1.jpg'
+
+Flags:
+  -c                      Delete all cached colorschemes.
+  -h                      Display this help page.
+  -i '/path/to/dir'       Which image to use.
+     '/path/to/img.jpg'
+
+"
+}
+
 get_args() {
-    while getopts ":ci:" opt; do
+    while getopts ":chi:" opt; do
         case "$opt" in
-            "c") rm -rf "${cache_dir}/schemes" ;;
+            "c") rm -rf "${cache_dir}/schemes"; exit ;;
+            "h") usage; exit 1 ;;
             "i")
                 if [[ -d "$OPTARG" || -f "$OPTARG" ]]; then
                     wal="$OPTARG"
@@ -186,7 +201,11 @@ get_args() {
     done
 
     # Check if -i was used.
-    [[ -z "$wal" ]] && { printf "%s\n" "Error: 'wal' must be run with '-i'" >&2; exit 1; }
+    if [[ -z "$wal" ]]; then
+        printf "%s\n" "Error: 'wal' must be run with '-i'" >&2
+        printf "%s\n" "Try 'wal -h' for more information."
+        exit 1
+    fi
 }
 
 main () {
