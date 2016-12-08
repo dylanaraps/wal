@@ -9,6 +9,14 @@
 
 ## Requirements
 
+
+#### Dependencies
+
+- `bash`
+- Colorscheme Generation: `imagemagick`
+- Wallpaper Setting: `feh`, `nitrogen` or `gsettings`.
+
+
 #### Terminal Emulator
 
 **Recommended:** `URxvt` or `Xterm`.
@@ -18,17 +26,25 @@
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
 
 
-#### Dependencies
+#### i3
 
-- `bash`
-- Colorscheme Generation: `imagemagick`
-- Wallpaper Setting: `feh`, `nitrogen` or `gsettings`.
+To use `wal` with i3 you have to make some modifications to your i3 config file.
 
-
-## Generate colorschemes for all images in a directory.
+i3 can read colors from `Xresources` into config variables! This allows us to change i3's colors dynamically. `wal` will then detect that you're running i3 and reload your config for you. If you've set it up correctly i3 will then use your new colorscheme.
 
 ```sh
-for img in "/path/to/dir"*; do
-   wal -i "$img"
-done
+# Set colors from Xresources
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+
+# class                 bor bg  fg  ind   child_border
+client.focused          $bg $bg $fg $bg   $bg
+client.focused_inactive $bg $bg $fg $bg   $bg
+client.unfocused        $bg $bg $fg $bg   $bg
+client.urgent           $bg $bg $fg $bg   $bg
+client.placeholder      $bg $bg $fg $bg   $bg
+
+client.background       $bg
 ```
+
+
