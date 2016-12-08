@@ -58,6 +58,8 @@ get_colors() {
         # Cache the scheme.
         printf "%s\n" "${colors[@]}" > "$cache_file"
     fi
+
+    out "colors: Generated colorscheme"
 }
 
 set_color() {
@@ -110,6 +112,8 @@ send_sequences() {
     for term in /dev/pts/[0-9]*; do
         printf "%b" "$sequences" > "$term" &
     done
+
+    out "colors: Set terminal colors"
 }
 
 set_wallpaper() {
@@ -136,6 +140,8 @@ set_wallpaper() {
             fi
         ;;
     esac
+
+    out "wallpaper: Set new wallpaper"
 }
 
 export_colors() {
@@ -145,10 +151,10 @@ export_colors() {
 
 reload_env() {
     # Reload i3
-    pgrep i3 && i3-msg reload &
+    pgrep i3 >/dev/null && { out "env: Reloaded i3"; i3-msg reload >/dev/null & }
 
     # Reload dunst
-    if pgrep dunst; then
+    if pgrep dunst >/dev/null; then
         pkill dunst
         dunst \
             -lb "${colors[15]}" \
@@ -157,11 +163,17 @@ reload_env() {
             -lf "${colors[0]}"  \
             -bf "${colors[0]}"  \
             -cf "${colors[9]}" &
+
+        out "env: Restarted dunst"
     fi
 
     # Reload lemonbar
     pkill bar
     bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
+}
+
+out() {
+    [[ "$quiet" != "on" ]] && printf "%s\n" "$1"
 }
 
 usage() { printf "%s" "\
@@ -174,12 +186,13 @@ Flags:
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
+  -q                      Quiet mode, don't print anything.
 
 "
 }
 
 get_args() {
-    while getopts ":chi:" opt; do
+    while getopts ":chi:q" opt; do
         case "$opt" in
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
@@ -192,6 +205,7 @@ get_args() {
                     exit 1
                 fi
             ;;
+            "q") quiet="on" ;;
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2
@@ -223,14 +237,14 @@ main () {
     create_sequences
 
     # Send the color changing sequences to every open terminal emulator.
-    send_sequences &
+    send_sequences
 
     # Set the wallpaper.
-    set_wallpaper &
+    set_wallpaper
 
     # Save the colorscheme to the Xresources db.
     export_colors
-    reload_env >/dev/null 2>&1
+    reload_env
 }
 
 main "$@"
