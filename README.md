@@ -55,3 +55,16 @@ client.background       $bg
 ### dunst
 
 `wal` will automatically detect you're running dunst and reload it using launch flags to change the colors.
+
+
+### vim
+
+Inside this repo there's a colorscheme I created for vim that uses your terminal colors. It was made to work with `wal` and you can install it using any vim package manager.
+
+```vim
+# Using plug
+Plug 'dylanaraps/wal'
+
+colorscheme wal
+
+```
