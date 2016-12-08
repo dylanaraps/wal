@@ -16,6 +16,7 @@
     - [i3](#i3)
     - [dunst](#dunst)
     - [vim](#vim)
+    - [shell variables](#shell-variables)
 
 
 ## Requirements
@@ -94,3 +95,32 @@ Plug 'dylanaraps/wal'
 
 colorscheme wal
 ```
+
+
+### Shell Variables
+
+`wal` also exports the colorscheme as a list of shell variables that you can source for use in scripts and the shell.
+
+Example:
+
+```sh
+# Add this line to your .bashrc or a shell script.
+source "$HOME/.cache/wal/colors.sh"
+
+```
+
+In the shell:
+
+```sh
+# Once the file is sourced you can use the colors like this:
+
+dylan ~ >echo "$color0"
+#282A23
+
+dylan ~ >echo "$color0 $color5"
+#282A23 #BCC3CE
+
+# lemonbar example
+lemonbar -B "$color7" -F "$color0"
+```
+

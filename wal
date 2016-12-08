@@ -10,13 +10,13 @@ export LANG=C
 
 shopt -s nullglob nocasematch
 
-# Options
-
-# Cache dir
-cache_dir="$HOME/.cache/wal"
-
 # Internal variables.
+cache_dir="$HOME/.cache/wal"
 newline=$'\n'
+
+
+# GENERATE COLORSCHEME
+
 
 rand_img() {
     # Get the current wallpaper.
@@ -62,9 +62,14 @@ get_colors() {
     out "colors: Generated colorscheme"
 }
 
+
+# SET COLORSCHEME
+
+
 set_color() {
     sequences+="\033]4;${1};${2}\007"
     x_colors+="*color${1}: ${2}${newline}"
+    sh_colors+="color${1}='${2}'${newline}"
 }
 
 set_special() {
@@ -78,7 +83,8 @@ set_special() {
     esac
 }
 
-create_sequences() {
+send_sequences() {
+    # Create string of escape sequences to send to the terminals.
     set_special 10  "${colors[15]}"
     set_special 11  "${colors[0]}"
     set_special 12  "${colors[15]}"
@@ -102,10 +108,6 @@ create_sequences() {
     set_color 13 "${colors[13]}"
     set_color 14 "${colors[14]}"
     set_color 15 "${colors[15]}"
-}
-
-send_sequences() {
-    create_sequences
 
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
@@ -114,6 +116,10 @@ send_sequences() {
     done
 
     out "colors: Set terminal colors"
+
+    # Merge the colors into the X db so new terminals use them.
+    xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
+        out "colors: Merged colors with X env"
 }
 
 set_wallpaper() {
@@ -142,11 +148,6 @@ set_wallpaper() {
     esac
 
     out "wallpaper: Set new wallpaper"
-}
-
-export_colors() {
-    # Merge the colors into the X db so new terminals use them.
-    xrdb -merge >/dev/null 2>&1 <<< "$x_colors"
 }
 
 reload_env() {
@@ -178,8 +179,21 @@ reload_env() {
     fi
 }
 
+
+# EXPORT COLORS
+
+
+export_envar() {
+    printf "%s" "$sh_colors"
+    out "export: Exported sh colors"
+}
+
+
+# OTHER
+
+
 out() {
-    [[ "$quiet" != "on" ]] && printf "%s\n" "$1"
+    [[ "$quiet" != "on" ]] && printf "%s\n" "$1" >&2
 }
 
 usage() { printf "%s" "\
@@ -233,14 +247,15 @@ get_args() {
     fi
 }
 
+
+# FINISH UP
+
+
 main () {
     get_args "$@"
 
     # Get 16 unique colors from the image.
     get_colors
-
-    # Generate a pallete.
-    create_sequences
 
     # Send the color changing sequences to every open terminal emulator.
     send_sequences
@@ -248,8 +263,10 @@ main () {
     # Set the wallpaper.
     set_wallpaper
 
+    # Export the colors in other formats.
+    export_envar > "${cache_dir}/colors.sh"
+
     # Save the colorscheme to the Xresources db.
-    export_colors
     reload_env
 }
 
