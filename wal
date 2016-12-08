@@ -2,7 +2,7 @@
 #
 # wol - Generate and change colorschemes on the fly.
 #
-# Depends on: feh, imagemagick
+# Created by Dylan Araps
 
 # Speed up script by not using unicode.
 export LC_ALL=C
