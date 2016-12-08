@@ -118,7 +118,6 @@ send_sequences() {
         [6-9]) set_color 8 "#a1a1a1" ;;
         *)     set_color 8 "${colors[7]}" ;;
     esac
-    echo "${colors[0]:1:1}"
 
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
