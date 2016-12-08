@@ -71,7 +71,7 @@ set_color() {
     sequences+="\033]4;${1};${2}\007"
     x_colors+="*color${1}: ${2}${newline}"
     sh_colors+="color${1}='${2}'${newline}"
-    scss_colors+="\$color${1}: ${2}${newline}"
+    scss_colors+="\$color${1}: ${2};${newline}"
 }
 
 set_special() {
@@ -177,16 +177,6 @@ reload_env() {
             -cf "${colors[9]}" &
 
         out "env: Restarted dunst"
-    fi
-
-    # Reload bar
-    # TODO Remove this as it's personal to me.
-    # TODO Come up with an extension system.
-    if pgrep bar >/dev/null; then
-        pkill bar
-        bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
-
-        out "env: Restarted lemonbar"
     fi
 }
 
