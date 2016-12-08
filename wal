@@ -41,7 +41,7 @@ get_colors() {
     [[ -d "$wal" ]] && rand_img
 
     # Check to see if wal was run from the -i dir.
-    [[ ! "${wal%/*}" =~ \/ ]] && wal_dir="."
+    [[ ! "${wal%/*}" =~ / ]] && wal_dir="."
 
     # Find out the image's full path.
     img_dir="$(cd "${wal_dir:-${wal%/*}}" && pwd -P)/${wal##*/}"
