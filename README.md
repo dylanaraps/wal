@@ -32,6 +32,8 @@ To use `wal` with i3 you have to make some modifications to your i3 config file.
 
 i3 can read colors from `Xresources` into config variables! This allows us to change i3's colors dynamically. `wal` will then detect that you're running i3 and reload your config for you. If you've set it up correctly i3 will then use your new colorscheme.
 
+Example:
+
 ```sh
 # Set colors from Xresources
 set_from_resource $fg i3wm.color7 #f0f0f0
