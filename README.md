@@ -29,7 +29,8 @@
     - DE: `xfce`, `gnome`, `cinnamon` `mate`
     - Universal: `feh`, `nitrogen`
 - Desktop Environment: `xprop`
-    - This is used to detect the correct wallpaper setter.
+    - Used to detect which DE wallpaper setter to use.
+    - Only required if you're running a DE.
 
 
 ### Terminal Emulator
