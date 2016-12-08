@@ -15,6 +15,8 @@
 - `bash`
 - Colorscheme Generation: `imagemagick`
 - Wallpaper Setting: `feh`, `nitrogen` or `gsettings`.
+- Desktop Environment: `xprop`
+    - This is used to detect the correct wallpaper setter.
 
 
 ### Terminal Emulator
