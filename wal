@@ -167,9 +167,15 @@ reload_env() {
         out "env: Restarted dunst"
     fi
 
-    # Reload lemonbar
-    pkill bar
-    bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
+    # Reload bar
+    # TODO Remove this as it's personal to me.
+    # TODO Come up with an extension system.
+    if pgrep bar >/dev/null; then
+        pkill bar
+        bar "${colors[15]}" "${colors[0]}" 2>/dev/null &
+
+        out "env: Restarted lemonbar"
+    fi
 }
 
 out() {
