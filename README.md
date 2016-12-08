@@ -20,6 +20,7 @@
     - [dunst](#dunst)
     - [vim](#vim)
     - [shell variables](#shell-variables)
+    - [scss variables](#scss-variables)
 
 
 ## Requirements
