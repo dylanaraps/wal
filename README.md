@@ -72,6 +72,8 @@ See this personal script of mine that updates my lemonbar and startpage with the
 
 https://github.com/dylanaraps/bin/blob/master/wal-set
 
+**NOTE:** `wal` stores the exported files in `$HOME/.cache/wal/`
+
 
 ### i3
 
