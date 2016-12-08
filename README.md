@@ -32,21 +32,23 @@
 
 To use `wal` with i3 you have to make some modifications to your i3 config file.
 
-i3 can read colors from `Xresources` into config variables! This allows us to change i3's colors dynamically. `wal` will then detect that you're running i3 and reload your config for you. If you've set it up correctly i3 will then use your new colorscheme.
+i3 can read colors from `Xresources` into config variables! This allows us to change i3's colors dynamically. On run `wal` will detect that you're running i3 and reload your config for you. If you've set it up correctly i3 will then use your new colorscheme.
 
 Example:
 
 ```sh
 # Set colors from Xresources
+# Change 'color7' and 'color2' to whatever colors you want i3 to use
+# from the generated scheme.
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 
-# class                 bor bg  fg  ind   child_border
-client.focused          $bg $bg $fg $bg   $bg
-client.focused_inactive $bg $bg $fg $bg   $bg
-client.unfocused        $bg $bg $fg $bg   $bg
-client.urgent           $bg $bg $fg $bg   $bg
-client.placeholder      $bg $bg $fg $bg   $bg
+# class                 border  backgr. text indicator child_border
+client.focused          $bg     $bg     $fg  $bg      $bg
+client.focused_inactive $bg     $bg     $fg  $bg      $bg
+client.unfocused        $bg     $bg     $fg  $bg      $bg
+client.urgent           $bg     $bg     $fg  $bg      $bg
+client.placeholder      $bg     $bg     $fg  $bg      $bg
 
 client.background       $bg
 ```
@@ -59,12 +61,13 @@ client.background       $bg
 
 ### vim
 
-Inside this repo there's a colorscheme I created for vim that uses your terminal colors. It was made to work with `wal` and you can install it using any vim package manager.
+Inside this repo there's a colorscheme I created for vim that uses your terminal colors. It was made to work with the colors `wal` generates and you can install it using any vim package manager.
+
+Example:
 
 ```vim
 # Using plug
 Plug 'dylanaraps/wal'
 
 colorscheme wal
-
 ```
