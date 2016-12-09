@@ -42,9 +42,14 @@
 
 **Recommended:** `URxvt` or `Xterm`.
 
-- Colors must be set through `.Xresources`.
 - Must support these escape sequences: `\033]11;#ff0000\007`
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
+
+I recommend `URxvt` and `Xterm` because `wal` merges the new colors with `xrdb` which makes any new instances of `URxvt` and `Xterm` use the new colors automatically.
+
+For other terminal emulators, only the currently running terminal windows will use the new colors. Any terminals you open after `wal` was run will use your usual colors.
+
+If you can figure out how to update the colorscheme of other terminal emulators from the command line then I'll add support.
 
 
 ## Usage
