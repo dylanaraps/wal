@@ -211,6 +211,14 @@ export_scss() {
 }
 
 
+# RELOAD COLORSCHEME
+
+reload_colors() {
+    sequences="$(< "${HOME}/.cache/wal/colors")"
+    printf "%b" "${sequences/??\]708\;\#??????}"
+}
+
+
 # OTHER
 
 
@@ -229,13 +237,14 @@ Flags:
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
   -q                      Quiet mode, don't print anything.
+  -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
 
 "
 }
 
 get_args() {
-    while getopts ":chi:qt" opt; do
+    while getopts ":chi:qrt" opt; do
         case "$opt" in
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
@@ -249,6 +258,7 @@ get_args() {
                 fi
             ;;
             "q") quiet="on" ;;
+            "r") reload_colors; exit ;;
             "t") vte="on" ;;
 
             "?")

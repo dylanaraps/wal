@@ -70,7 +70,7 @@ Add this line to your shell startup file. (`.bashrc`, `.zshrc` and etc.)
 
 ```sh
 # Import colorscheme from 'wal'
-printf "%b" "$(< "${HOME}/.cache/wal/colors")"
+wal -r
 ```
 
 
@@ -91,6 +91,7 @@ Flags:
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
   -q                      Quiet mode, don't print anything.
+  -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
 
 ```
