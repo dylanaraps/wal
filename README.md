@@ -59,7 +59,7 @@ The only setup that `wal` requires is a single line added to your shell rc file 
 
 This line is required because the escape sequences to change terminal colors don't save the theme for future use. Any new terminal windows you open won't be using the new colors unless this line is added to your shell rc file.
 
-**URxvt and Xterm**
+**URxvt and Xterm.**
 
 `wal` will work out of the box.
 
