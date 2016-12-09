@@ -61,7 +61,7 @@ This line is required because the escape sequences to change terminal colors don
 
 **URxvt and Xterm**
 
-`wal` will work without the line.
+`wal` will work out of the box.
 
 
 **All other terminal emulators.**
