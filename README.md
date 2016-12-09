@@ -14,6 +14,7 @@
 - **[Requirements](#requirements)**
     - [Dependencies](#dependencies)
     - [Terminal Emulator](#terminal-emulator)
+- **[Setup](#setup)**
 - **[Usage](#usage)**
 - **[Customization](#customization)**
     - [i3](#i3)
