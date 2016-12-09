@@ -69,6 +69,7 @@ Flags:
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
   -q                      Quiet mode, don't print anything.
+  -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
 
 ```
 
