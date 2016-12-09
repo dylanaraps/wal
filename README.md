@@ -29,11 +29,13 @@
 ### Dependencies
 
 - `bash`
-- Colorscheme Generation: `imagemagick`
-- Wallpaper Setting:
-    - DE: `xfce`, `gnome`, `cinnamon`, `mate`
-    - Universal: `feh`, `nitrogen`, `bgs`, `hsetroot`, `habak`
-- Desktop Environment: `xprop`
+- `imagemagick`
+    - Colorscheme generation
+- `xfce`, `gnome`, `cinnamon`, `mate`
+    - Desktop wallpaper setting.
+- `feh`, `nitrogen`, `bgs`, `hsetroot`, `habak`
+    - Universal wallpaper setting.
+- `xprop`
     - Used to detect which DE wallpaper setter to use.
     - Only required if you're running a DE.
 
