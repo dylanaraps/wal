@@ -47,16 +47,24 @@
 - Must support these escape sequences: `\033]11;#ff0000\007`
     - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
 
-I recommend `URxvt` and `Xterm` because `wal` merges the new colors with `xrdb` which makes any new instances of `URxvt` and `Xterm` use the new colors automatically.
+**URxvt and Xterm**
 
-For other terminal emulators, only the currently running terminal windows will use the new colors. Any terminals you open after `wal` was run will use your usual colors.
+`wal` will work out of the box.
 
-If you can figure out how to update the colorscheme of other terminal emulators from the command line then I'll add support.
+**All other terminal emulators.**
 
+Add this line to your shell startup file. (`.bashrc`, `.zshrc` and etc.)
+
+```sh
+# Import colorscheme from 'wal'
+wal -qti "$(< "$HOME/.cache/wal/wal")" &
+```
 
 ## Usage
 
 Run `wal` and point it to either a directory (`wal -i "path/to/dir"`) or an image (`wal -i "/path/to/img.jpg"`) and that's all. `wal` will change your wallpaper for you and also set your terminal colors.
+
+**NOTE:** If you're running a terminal emulator that is **not** URxvt or Xterm then look above at the line you must add to your shell rc file.
 
 ```sh
 Usage: wal [OPTION] -i '/path/to/dir'
