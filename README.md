@@ -42,14 +42,27 @@
 
 ### Terminal Emulator
 
-**Recommended:** `URxvt` or `Xterm`.
+To use `wal` your terminal emulator must support a special type of escape sequence. The command below can be used as a test to see if `wal` will work with your setup.
 
-- Must support these escape sequences: `\033]11;#ff0000\007`
-    - Test: Does `printf "%b" "\033]11;#ff0000\007"` set your terminal background red?
+Run the command below, does the background color of your terminal become red?
+
+```sh
+printf "%b" "\033]11;#ff0000\007"
+```
+
+If your terminal's background color is now red, your terminal will work with `wal`.
+
+
+## Setup
+
+The only setup that `wal` requires is a single line added to your shell rc file (`.bashrc`, `.zshrc` and etc). The line we're adding sets the colorscheme for any new terminal emulators you open.
+
+This line is required because the escape sequences to change terminal colors don't save the theme for future use. Any new terminal windows you open won't be using the new colors unless this line is added to your shell rc file.
 
 **URxvt and Xterm**
 
-`wal` will work out of the box.
+`wal` will work without the line.
+
 
 **All other terminal emulators.**
 
@@ -57,8 +70,9 @@ Add this line to your shell startup file. (`.bashrc`, `.zshrc` and etc.)
 
 ```sh
 # Import colorscheme from 'wal'
-wal -qti "$(< "$HOME/.cache/wal/wal")" &
+printf "%b" "$(< "${HOME}/.cache/wal/colors")"
 ```
+
 
 ## Usage
 
