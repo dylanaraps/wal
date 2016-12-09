@@ -32,7 +32,7 @@
 - Colorscheme Generation: `imagemagick`
 - Wallpaper Setting:
     - DE: `xfce`, `gnome`, `cinnamon`, `mate`
-    - Universal: `feh`, `nitrogen`
+    - Universal: `feh`, `nitrogen`, `bgs`, `hsetroot`, `habak`
 - Desktop Environment: `xprop`
     - Used to detect which DE wallpaper setter to use.
     - Only required if you're running a DE.
