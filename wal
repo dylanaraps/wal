@@ -138,19 +138,28 @@ set_wallpaper() {
     de="${XDG_CURRENT_DESKTOP}"
 
     # Fallback to using xprop.
-    [[ -n "$DISPLAY" && -z "$de" ]] && \
-        de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
+    [[ -z "$de" ]] && de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
 
     case "$de" in
         *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
         *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
         *"XFCE"*) xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" ;;
+        *"GNOME"*) gsettings set org.gnome.desktop.background picture-uri "file://${wal}" ;;
         *)
             if type -p feh >/dev/null; then
                 feh --bg-fill "$wal"
 
             elif type -p nitrogen >/dev/null; then
                 nitrogen --set-zoom-fill "$wal"
+
+            elif type -p bgs >/dev/null; then
+                bgs "$wal"
+
+            elif type -p hsetroot >/dev/null; then
+                hsetroot -fill "$wal"
+
+            elif type -p habak >/dev/null; then
+                habak -mS "$wal"
 
             else
                 gsettings set org.gnome.desktop.background picture-uri "file://${wal}"
