@@ -150,7 +150,7 @@ Inside this repo there's a colorscheme I created for vim that uses your terminal
 Example:
 
 ```vim
-# Using plug
+! Using plug
 Plug 'dylanaraps/wal'
 
 colorscheme wal
