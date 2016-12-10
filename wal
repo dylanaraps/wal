@@ -63,6 +63,15 @@ get_colors() {
         printf "%s\n" "${colors[@]}" > "$cache_file"
     fi
 
+    # If imagemagick finds less than 16 colors, abort and warn the user.
+    (( "${#colors[@]}" <= 15 )) && {
+        out "Error: Imagemagick failed to generate a 16 color palette for ${wal##*/}"
+        out "Error: Imagemagick could only generate a ${#colors[@]} color palette."
+        out "Error: wal won't do guesswork to fill in the blanks."
+        out "Error: Please try a different image."
+        exit 1
+    }
+
     out "colors: Generated colorscheme"
 }
 
