@@ -6,6 +6,8 @@
 
 `wal` can also change the colors in some other programs, check out the [Customization](#customization) section below.
 
+**NOTE:** `wal` is not perfect and won't work with some images.
+
 [Album of examples (Warning large)](http://imgur.com/a/ttSOb)
 
 ![screen](http://i.imgur.com/4aLsvvW.png)
