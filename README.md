@@ -102,9 +102,32 @@ Flags:
 
 ## Customization
 
-See this personal script of mine that updates my lemonbar, dunst and startpage with the new colors.
+I've written another script \[1\] for personal use only that updates my `lemonbar`, `dunst` and `startpage` colors with the new ones from `wal` when run.
 
-https://github.com/dylanaraps/bin/blob/master/wal-set
+What I've done is bind both `wal` and my custom script to the same key so that after `wal` has done its thing my custom script applies the colors to the rest of my environment.
+
+```sh
+# i3 config.
+# ...
+
+# Cycle wallpapers and apply new colorscheme.
+bindsym $mod+w exec "wal -i $HOME/Pictures/Wallpapers && wal-set"
+```
+
+Now whenever I press `Win+w` a random wallpaper is chosen and all of the programs on my system start using the new colors immediately.
+
+I've also set `wal` and my custom script to start with X. This means that when I boot my PC a random wallpaper is chosen and colors are generated + applied to all of my programs.
+
+```sh
+# .xinitrc
+wal -i "$HOME/Pictures/Wallpapers"
+wal-set
+exec i3
+```
+
+Have a look at my script to see how `wal` is used and how the programs get reloaded with the new colors.
+
+\[1\] https://github.com/dylanaraps/bin/blob/master/wal-set
 
 **NOTE:** `wal` stores the exported files in `$HOME/.cache/wal/`
 
