@@ -102,7 +102,7 @@ Flags:
 
 ## Customization
 
-See this personal script of mine that updates my lemonbar and startpage with the new colors.
+See this personal script of mine that updates my lemonbar, dunst and startpage with the new colors.
 
 https://github.com/dylanaraps/bin/blob/master/wal-set
 

@@ -208,6 +208,11 @@ reload_colors() {
     printf "%b" "${sequences/??\]708\;\#??????}"
 }
 
+reload_env() {
+    # Reload i3 if running.
+    pgrep i3 && i3-msg reload &
+}
+
 
 # OTHER
 
@@ -286,6 +291,9 @@ main () {
 
     # Set the wallpaper.
     set_wallpaper
+
+    # Reload env
+    reload_env >/dev/null 2>&1
 
     # Export the colors in other formats.
     export_colors
