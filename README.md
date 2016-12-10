@@ -1,4 +1,4 @@
-# wal (WIP)
+# wal
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.md) [![Build Status](https://travis-ci.org/dylanaraps/wal.svg?branch=master)](https://travis-ci.org/dylanaraps/wal)
 
