@@ -18,6 +18,7 @@
 - **[Requirements](#requirements)**
     - [Dependencies](#dependencies)
     - [Terminal Emulator](#terminal-emulator)
+- **[Installation](#installation)**
 - **[Setup](#setup)**
 - **[Usage](#usage)**
 - **[Customization](#customization)**
@@ -56,6 +57,11 @@ printf "%b" "\033]11;#ff0000\007"
 ```
 
 If your terminal's background color is now red, your terminal will work with `wal`.
+
+
+## Installation
+
+Just grab the script (`wal`) and add it to your path.
 
 
 ## Setup
