@@ -77,7 +77,7 @@ Add this line to your shell startup file. (`.bashrc`, `.zshrc` and etc.)
 
 ```sh
 # Import colorscheme from 'wal'
-wal -r &
+wal -r 
 ```
 
 ### Making the colorscheme persist on reboot.
