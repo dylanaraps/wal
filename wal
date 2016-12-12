@@ -141,10 +141,6 @@ send_sequences() {
     done
 
     out "colors: Set terminal colors"
-
-    # Merge the colors into the X db so new terminals use them.
-    xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
-        out "colors: Merged colors with X env"
 }
 
 set_wallpaper() {
@@ -203,10 +199,18 @@ export_scss() {
     out "export: Exported scss color variables"
 }
 
+export_rofi() {
+    x_colors+="rofi.color-window: ${colors[0]}, ${colors[0]}, ${colors[10]}${newline}"
+    x_colors+="rofi.color-normal: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
+    x_colors+="rofi.color-active: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
+    x_colors+="rofi.color-urgent: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[1]}, ${colors[15]}${newline}"
+}
+
 export_colors() {
     export_sequences > "${cache_dir}/colors"
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
+    export_rofi
 }
 
 
@@ -226,6 +230,12 @@ reload_colors() {
 reload_env() {
     # Reload i3 if running.
     pgrep i3 && i3-msg reload &
+}
+
+reload_xrdb() {
+    # Merge the colors into the X db so new terminals use them.
+    xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
+        out "colors: Merged colors with X env"
 }
 
 
@@ -312,11 +322,14 @@ main () {
     # Set the wallpaper.
     set_wallpaper
 
+    # Export the colors in other formats.
+    export_colors
+
     # Reload env
     reload_env >/dev/null 2>&1
 
-    # Export the colors in other formats.
-    export_colors
+    # Merge colors into X env.
+    reload_xrdb
 
     # Execute custom script.
     type -p "${external_script[0]}" >/dev/null 2>&1 && "${external_script[@]}"
