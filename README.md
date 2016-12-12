@@ -66,22 +66,27 @@ Just grab the script (`wal`) and add it to your path.
 
 ## Setup
 
-The only setup that `wal` requires is a single line added to your shell rc file (`.bashrc`, `.zshrc` and etc). The line we're adding sets the colorscheme for any new terminal emulators you open.
 
-This line is required because the escape sequences to change terminal colors don't save the theme for future use. Any new terminal windows you open won't be using the new colors unless this line is added to your shell rc file.
+### Applying the theme to new terminals.
 
-**URxvt and Xterm.**
-
-`wal` will work out of the box.
-
-
-**All other terminal emulators.**
+`wal` only applies the new colors to the currently open terminals. Any new terminal windows you open won't be using the new theme unless you add a single line to your shell's start up file. (`.bashrc`, `.zshrc` and etc.) The `-r` flags tells `wal` to find the current colorscheme inside the cache and then set it for the new terminal.
 
 Add this line to your shell startup file. (`.bashrc`, `.zshrc` and etc.)
 
 ```sh
 # Import colorscheme from 'wal'
-wal -r
+wal -r &
+```
+
+### Making the colorscheme persist on reboot.
+
+On reboot your new colroscheme won't be set or in use. To fix this you have to add a line to your `.xinitrc` or whatever file starts programs on your system. This `wal` command will set your wallpaper to the wallpaper that was set last boot and also apply the colorscheme again.
+
+Without this you'll be themeless until you run `wal` again on boot.
+
+```sh
+# Add this to your .xinitrc or whatever file starts programs on startup.
+wal -i "$(< "${HOME}/.cache/wal/wal")"
 ```
 
 
