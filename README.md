@@ -23,7 +23,7 @@
 - **[Usage](#usage)**
 - **[Customization](#customization)**
     - [i3](#i3)
-    - [dunst](#dunst)
+    - [rofi](#rofi)
     - [vim](#vim)
     - [shell variables](#shell-variables)
     - [scss variables](#scss-variables)
@@ -172,9 +172,9 @@ bindsym $mod+d exec dmenu_run -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"
 ```
 
 
-### dunst
+### rofi
 
-`wal` will automatically detect you're running dunst and reload it using launch flags to change the colors.
+`wal` updates rofi's colors for you out of the box, automatically.
 
 
 ### vim
