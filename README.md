@@ -80,7 +80,7 @@ wal -r &
 
 ### Making the colorscheme persist on reboot.
 
-On reboot your new colroscheme won't be set or in use. To fix this you have to add a line to your `.xinitrc` or whatever file starts programs on your system. This `wal` command will set your wallpaper to the wallpaper that was set last boot and also apply the colorscheme again.
+On reboot your new colorscheme won't be set or in use. To fix this you have to add a line to your `.xinitrc` or whatever file starts programs on your system. This `wal` command will set your wallpaper to the wallpaper that was set last boot and also apply the colorscheme again.
 
 Without this you'll be themeless until you run `wal` again on boot.
 
