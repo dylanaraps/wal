@@ -213,8 +213,14 @@ export_colors() {
 # RELOAD COLORSCHEME
 
 reload_colors() {
+    # Source the current sequences
     sequences="$(< "${HOME}/.cache/wal/colors")"
-    printf "%b" "${sequences/??\]708\;\#??????}"
+
+    # If vte mode was used, remove the problem sequence.
+    [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
+
+    printf "%b" "$sequences"
+    exit
 }
 
 reload_env() {
@@ -240,6 +246,7 @@ Flags:
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
+  -o 'script_name'        External script to run after 'wal'.
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
@@ -248,7 +255,7 @@ Flags:
 }
 
 get_args() {
-    while getopts ":chi:qrt" opt; do
+    while getopts ":chi:o:qrt" opt; do
         case "$opt" in
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
@@ -261,8 +268,9 @@ get_args() {
                     exit 1
                 fi
             ;;
+            "o") external_script=("$OPTARG") ;;
             "q") quiet="on" ;;
-            "r") reload_colors; exit ;;
+            "r") reload="on" ;;
             "t") vte="on" ;;
 
             "?")
@@ -276,6 +284,9 @@ get_args() {
             ;;
         esac
     done
+
+    # Reload colors.
+    [[ "$reload" == "on" ]] && reload_colors
 
     # Check if -i was used.
     if [[ -z "$wal" ]]; then
@@ -306,6 +317,9 @@ main () {
 
     # Export the colors in other formats.
     export_colors
+
+    # Execute custom script.
+    type -p "${external_script[0]}" >/dev/null 2>&1 && "${external_script[@]}"
 }
 
 main "$@"
