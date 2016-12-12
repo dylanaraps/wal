@@ -20,6 +20,8 @@
     - [Terminal Emulator](#terminal-emulator)
 - **[Installation](#installation)**
 - **[Setup](#setup)**
+    - [Applying the Theme to New Terminals](#applying-the-theme-to-new-terminals)
+    - [Making the Colorscheme Persist on Reboot](#making-the-colorscheme-persist-on-reboot)
 - **[Usage](#usage)**
 - **[Customization](#customization)**
     - [i3](#i3)
