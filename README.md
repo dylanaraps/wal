@@ -93,14 +93,15 @@ Run `wal` and point it to either a directory (`wal -i "path/to/dir"`) or an imag
 
 ```sh
 Usage: wal [OPTION] -i '/path/to/dir'
-Example: wal -i '/home/dylan/Pictures/Wallpapers/'
-         wal -i '/home/dylan/Pictures/1.jpg'
+Example: wal -i '${HOME}/Pictures/Wallpapers/'
+         wal -i '${HOME}/Pictures/1.jpg'
 
 Flags:
   -c                      Delete all cached colorschemes.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
+  -o 'script_name'        External script to run after 'wal'.
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
