@@ -127,7 +127,7 @@ What I've done is bind both `wal` and my custom script to the same key so that a
 # ...
 
 # Cycle wallpapers and apply new colorscheme.
-bindsym $mod+w exec "wal -i $HOME/Pictures/Wallpapers && wal-set"
+bindsym $mod+w exec "wal -i $HOME/Pictures/Wallpapers -o wal-set"
 ```
 
 Now whenever I press `Win+w` a random wallpaper is chosen and all of the programs on my system start using the new colors immediately.
@@ -136,8 +136,7 @@ I've also set `wal` and my custom script to start with X. This means that when I
 
 ```sh
 # .xinitrc
-wal -i "$HOME/Pictures/Wallpapers"
-wal-set
+wal -i "$HOME/Pictures/Wallpapers" -o wal-set
 exec i3
 ```
 
