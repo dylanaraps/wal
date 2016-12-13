@@ -73,7 +73,7 @@ hi Cursor ctermbg=NONE ctermfg=8 cterm=NONE
 hi Structure ctermbg=NONE ctermfg=5 cterm=NONE
 hi CursorColumn ctermbg=8 ctermfg=7 cterm=NONE
 hi ModeMsg ctermbg=NONE ctermfg=7 cterm=NONE
-hi SpellBad ctermbg=NONE ctermfg=1 cterm=underline
+hi SpellBad ctermbg=1 ctermfg=7 cterm=underline
 hi SpellCap ctermbg=NONE ctermfg=4 cterm=underline
 hi SpellLocal ctermbg=NONE ctermfg=5 cterm=underline
 hi SpellRare ctermbg=NONE ctermfg=6 cterm=underline
