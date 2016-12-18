@@ -106,7 +106,7 @@ send_sequences() {
     set_special 14  "${colors[0]}"
 
     # This escape sequence doesn't work in VTE terminals.
-    [[ -z "$VTE_VERSION" || "$vte" != "on" ]] && set_special 708 "${colors[0]}"
+    [[ "$vte" != "on" ]] && set_special 708 "${colors[0]}"
 
     set_color 0  "${colors[0]}"
     set_color 1  "${colors[9]}"
@@ -221,7 +221,7 @@ reload_colors() {
     sequences="$(< "${HOME}/.cache/wal/colors")"
 
     # If vte mode was used, remove the problem sequence.
-    [[ "$VTE_VERSION" || "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
+    [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
 
     printf "%b" "$sequences"
     exit
