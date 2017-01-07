@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# wol - Generate and change colorschemes on the fly.
+# wal - Generate and change colorschemes on the fly.
 #
 # Created by Dylan Araps
 
@@ -12,8 +12,7 @@ shopt -s nullglob nocasematch
 
 # Internal variables.
 cache_dir="${HOME}/.cache/wal"
-newline="
-"
+newline=$'\n'
 
 
 # GENERATE COLORSCHEME
@@ -237,7 +236,6 @@ reload_xrdb() {
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
 }
-
 
 # OTHER
 
