@@ -10,6 +10,5 @@ addons:
 os:
     - linux
 
-
 script:
     - shellcheck wal
