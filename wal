@@ -22,14 +22,20 @@ rand_img() {
     # Get the current wallpaper.
     old_wall="$(< "${cache_dir}/wal")"
 
+    # Make glob fails silent.
+    shopt -s nullglob
+
     # Create an array of images and exclude the current wallpaper.
-    files=("${wal%/}"/*.{png,jpg,jpeg})
+    files=("${wal%/}"/*.{png,jpg,jpeg,jpe})
     files=("${files[@]/"$old_wall"}")
+
+    # Reset glob.
+    shopt -u nullglob
 
     # Pick a random image.
     wal="${files[RANDOM % ${#files[@]}]}"
 
-    # If the shuffle fails (rare) set the image to the first element.
+    # Set the image to the first in the directory if the shuffle failes.
     [[ ! -f "$wal" ]] && wal="${files[0]}"
 
     # Cache the wallpaper name
