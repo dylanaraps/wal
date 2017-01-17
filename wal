@@ -50,7 +50,7 @@ get_colors() {
     [[ -d "$wal" ]] && rand_img
 
     # Store cached colorscheme as 'dir-to-img.jpg'
-    cache_file="${cache_dir}/schemes/${img_dir//\//-}"
+    cache_file="${cache_dir}/schemes/${wal//\//-}"
 
     # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
