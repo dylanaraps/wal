@@ -49,12 +49,6 @@ get_colors() {
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
 
-    # Check to see if wal was run from the -i dir.
-    [[ ! "${wal%/*}" =~ / ]] && wal_dir="."
-
-    # Find out the image's full path.
-    img_dir="$(cd "${wal_dir:-${wal%/*}}" && pwd -P)/${wal##*/}"
-
     # Store cached colorscheme as 'dir-to-img.jpg'
     cache_file="${cache_dir}/schemes/${img_dir//\//-}"
 
@@ -158,8 +152,13 @@ set_wallpaper() {
     case "$de" in
         *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
         *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
-        *"XFCE"*) xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" ;;
         *"GNOME"*) gsettings set org.gnome.desktop.background picture-uri "file://${wal}" ;;
+
+        *"XFCE"*)
+            xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" ||\
+            xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set "$wal"
+        ;;
+
         *)
             if type -p feh >/dev/null; then
                 feh --bg-fill "$wal"
@@ -274,14 +273,36 @@ get_args() {
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
             "i")
-                if [[ -d "$OPTARG" || -f "$OPTARG" ]]; then
-                    wal="$OPTARG"
+                # Go to the relative PATH.
+                if ! cd "${OPTARG%/*}"; then
+                    printf "%s\n" "Error: Directory '$OPTARG' doesn't exist or is inaccessible"
+                    printf "%s\n" "       Check that the directory exists or try another directory."
+                    exit 1
+                fi
+
+                img_dir="${OPTARG##*/}"
+
+                # Iterate down a (possible) chain of symlinks.
+                while [[ -L "$img_dir" ]]; do
+                    img_dir="$(readlink "$img_dir")"
+                    cd "${img_dir%/*}" || exit
+                    img_dir="${img_dir##*/}"
+                done
+
+                # Final directory.
+                img_dir="$(pwd -P)"
+                img="${OPTARG/*\/}"
+
+                if [[ -e "${img_dir}/${img}" ]]; then
+                    wal="${img_dir}/${OPTARG/*\/}"
 
                 else
-                    printf "%s\n" "Image/Directory doesn't exist: $OPTARG" >&2
+                    printf "%s\n" "Error: File: '${img_dir}/${img}' not found."
+                    printf "%s\n" "       Check that the file exists or try another file."
                     exit 1
                 fi
             ;;
+
             "o") external_script=("$OPTARG") ;;
             "q") quiet="on" ;;
             "r") reload="on" ;;
