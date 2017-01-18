@@ -244,6 +244,36 @@ reload_xrdb() {
 
 # OTHER
 
+get_full_path() {
+    # Go to the relative PATH.
+    if ! cd "${1%/*}"; then
+        printf "%s\n" "Error: Directory '$1' doesn't exist or is inaccessible" >&2
+        printf "%s\n" "       Check that the directory exists or try another directory." >&2
+        exit 1
+    fi
+
+    img_dir="${1##*/}"
+
+    # Iterate down a (possible) chain of symlinks.
+    while [[ -L "$img_dir" ]]; do
+        img_dir="$(readlink "$img_dir")"
+        cd "${img_dir%/*}" || exit
+        img_dir="${img_dir##*/}"
+    done
+
+    # Final directory.
+    img_dir="$(pwd -P)"
+    img="${1/*\/}"
+
+    if [[ -e "${img_dir}/${img}" ]]; then
+        printf "%s\n" "${img_dir}/${1/*\/}"
+
+    else
+        printf "%s\n" "Error: File: '${img_dir}/${img}' not found." >&2
+        printf "%s\n" "       Check that the file exists or try another file." >&2
+        exit 1
+    fi
+}
 
 out() {
     [[ "$quiet" != "on" ]] && printf "%s\n" "$1" >&2
@@ -272,39 +302,10 @@ get_args() {
         case "$opt" in
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
+
             "i")
                 [[ -f "${PWD}/${OPTARG/*\/}" ]] && { wal="${PWD}/${OPTARG/*\/}"; return; }
-
-                if [[ -z "$wal" ]]; then
-                    # Go to the relative PATH.
-                    if ! cd "${OPTARG%/*}"; then
-                        printf "%s\n" "Error: Directory '$OPTARG' doesn't exist or is inaccessible"
-                        printf "%s\n" "       Check that the directory exists or try another directory."
-                        exit 1
-                    fi
-
-                    img_dir="${OPTARG##*/}"
-
-                    # Iterate down a (possible) chain of symlinks.
-                    while [[ -L "$img_dir" ]]; do
-                        img_dir="$(readlink "$img_dir")"
-                        cd "${img_dir%/*}" || exit
-                        img_dir="${img_dir##*/}"
-                    done
-
-                    # Final directory.
-                    img_dir="$(pwd -P)"
-                    img="${OPTARG/*\/}"
-
-                    if [[ -e "${img_dir}/${img}" ]]; then
-                        wal="${img_dir}/${OPTARG/*\/}"
-
-                    else
-                        printf "%s\n" "Error: File: '${img_dir}/${img}' not found."
-                        printf "%s\n" "       Check that the file exists or try another file."
-                        exit 1
-                    fi
-                fi
+                [[ -z "$wal" ]] && wal="$(get_full_path "$OPTARG")"
             ;;
 
             "o") external_script=("$OPTARG") ;;
