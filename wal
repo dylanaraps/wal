@@ -304,7 +304,7 @@ get_args() {
             "h") usage; exit 1 ;;
 
             "i")
-                [[ -f "${PWD}/${OPTARG/*\/}" ]] && { wal="${PWD}/${OPTARG/*\/}"; return; }
+                [[ -f "${PWD}/${OPTARG%/*}" ]] && { wal="${PWD}/${OPTARG%/*}"; return; }
                 [[ -z "$wal" ]] && wal="$(get_full_path "$OPTARG")"
             ;;
 
