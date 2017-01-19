@@ -80,11 +80,11 @@ Add this line to your shell startup file. (`.bashrc`, `.zshrc` or etc.)
 (wal -r &)
 ```
 
-Here's how it works:
+Here's how the extra syntax above works:
 
 ```sh
 &   # Run the process in the background.
-( ) # Hide bash job control messages.
+( ) # Hide shell job control messages.
 ```
 
 ### Making the colorscheme persist on reboot.
