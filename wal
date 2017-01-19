@@ -252,15 +252,6 @@ get_full_path() {
         exit 1
     fi
 
-    img_dir="${1##*/}"
-
-    # Iterate down a (possible) chain of symlinks.
-    while [[ -L "$img_dir" ]]; do
-        img_dir="$(readlink "$img_dir")"
-        cd "${img_dir%/*}" || exit
-        img_dir="${img_dir##*/}"
-    done
-
     # Final directory.
     img_dir="$(pwd -P)"
     img="${1/*\/}"
@@ -304,7 +295,7 @@ get_args() {
             "h") usage; exit 1 ;;
 
             "i")
-                [[ -f "${PWD}/${OPTARG/*\/}" ]] && { wal="${PWD}/${OPTARG/*\/}"; return; }
+                [[ -f "${PWD}/${OPTARG/*\/}" ]] && wal="${PWD}/${OPTARG/*\/}"
                 [[ -z "$wal" ]] && wal="$(get_full_path "$OPTARG")"
             ;;
 
