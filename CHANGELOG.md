@@ -1,4 +1,4 @@
-# 19 January
+## 19 January
 
 - Fixed issue with `wal` file not being created.
 - Fixed issue when `wal` was given a symlink as an argument.
