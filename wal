@@ -37,9 +37,6 @@ rand_img() {
 
     # Set the image to the first in the directory if the shuffle failes.
     [[ ! -f "$wal" ]] && wal="${files[0]}"
-
-    # Cache the wallpaper name
-    printf "%s\n" "$wal" > "${cache_dir}/wal"
 }
 
 get_colors() {
@@ -51,6 +48,9 @@ get_colors() {
 
     # Store cached colorscheme as 'dir-to-img.jpg'
     cache_file="${cache_dir}/schemes/${wal//\//-}"
+
+    # Cache the wallpaper name
+    printf "%s\n" "$wal" > "${cache_dir}/wal"
 
     # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
