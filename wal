@@ -19,9 +19,6 @@ newline=$'\n'
 
 
 rand_img() {
-    # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
-
     # Make glob fails silent.
     shopt -s nullglob
 
@@ -43,8 +40,14 @@ get_colors() {
     # Create the cache dir.
     mkdir -p "${cache_dir}/schemes"
 
+    # Get the current wallpaper.
+    old_wall="$(< "${cache_dir}/wal")"
+
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
+
+    # If the wallpaper doesn't exist, use the current one.
+    [[ ! -f "$wal" ]] && wal="$old_wall"
 
     # Store cached colorscheme as 'dir-to-img.jpg'
     cache_file="${cache_dir}/schemes/${wal//\//-}"
