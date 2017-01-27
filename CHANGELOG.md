@@ -1,3 +1,7 @@
+## 28 January
+
+- Added `-a` flag to set terminal transparency. (Only works with URxvt)
+
 ## 19 January
 
 - Fixed issue with `wal` file not being created.
