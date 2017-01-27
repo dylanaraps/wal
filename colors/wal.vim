@@ -16,7 +16,7 @@ let colors_name = "wal"
 " highlight groups {{{
 
 set t_Co=16
-hi Normal ctermbg=0 ctermfg=7 cterm=NONE
+hi Normal ctermbg=NONE ctermfg=7 cterm=NONE
 hi NonText ctermbg=NONE ctermfg=0 cterm=NONE
 hi Comment ctermbg=NONE ctermfg=8 cterm=NONE
 hi Constant ctermbg=NONE ctermfg=3 cterm=NONE

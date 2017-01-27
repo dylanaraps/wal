@@ -102,13 +102,13 @@ set_special() {
 send_sequences() {
     # Create string of escape sequences to send to the terminals.
     set_special 10  "${colors[15]}"
-    set_special 11  "${colors[0]}"
+    set_special 11  "${alpha:+[${alpha}]}${colors[0]}"
     set_special 12  "${colors[15]}"
     set_special 13  "${colors[15]}"
-    set_special 14  "${colors[0]}"
+    set_special 14  "${alpha:+[${alpha}]}${colors[0]}"
 
     # This escape sequence doesn't work in VTE terminals.
-    [[ "$vte" != "on" ]] && set_special 708 "${colors[0]}"
+    [[ "$vte" != "on" ]] && set_special 708 "${alpha:+[${alpha}]}${colors[0]}"
 
     set_color 0  "${colors[0]}"
     set_color 1  "${colors[9]}"
@@ -240,6 +240,8 @@ reload_env() {
 }
 
 reload_xrdb() {
+    [[ "$alpha" ]] && x_colors+="URxvt.depth: 32${newline}"
+
     # Merge the colors into the X db so new terminals use them.
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
@@ -279,6 +281,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
          wal -i '${HOME}/Pictures/1.jpg'
 
 Flags:
+  -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
@@ -292,8 +295,9 @@ Flags:
 }
 
 get_args() {
-    while getopts ":chi:o:qrt" opt; do
+    while getopts ":a:chi:o:qrt" opt; do
         case "$opt" in
+            "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
 
