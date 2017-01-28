@@ -103,14 +103,13 @@ wal -i "$(< "${HOME}/.cache/wal/wal")"
 
 Run `wal` and point it to either a directory (`wal -i "path/to/dir"`) or an image (`wal -i "/path/to/img.jpg"`) and that's all. `wal` will change your wallpaper for you and also set your terminal colors.
 
-**NOTE:** If you're running a terminal that is **not** URxvt or Xterm then look above at the line you must add to your shell rc file.
-
 ```sh
 Usage: wal [OPTION] -i '/path/to/dir'
 Example: wal -i '${HOME}/Pictures/Wallpapers/'
          wal -i '${HOME}/Pictures/1.jpg'
 
 Flags:
+  -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
