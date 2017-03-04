@@ -202,6 +202,17 @@ Plug 'dylanaraps/wal'
 colorscheme wal
 ```
 
+### polybar
+
+Polybar can read colors from `Xresources` to set the bar's colors.
+
+Example:
+
+```vim
+fg = ${xrdb:color7}
+bg = ${xrdb:color2}
+```
+
 
 ### Shell Variables
 
