@@ -22,7 +22,7 @@ out_filename="${iterm_color_dir}/${wal_filename}.itermcolors"
 c=($(< "${cache_dir}/colors.txt"))
 c=("${c[@]//\#}")
 
-div () {
+div() {
     # Function to create RGB values without using bc.
     if ((${1} == 255)); then
         printf "%s\n" "1.0"
