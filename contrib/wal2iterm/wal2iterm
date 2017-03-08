@@ -5,71 +5,54 @@
 # Created by Joe Hopkinson
 
 # wal's cache directory
-CACHE_DIR="${HOME}/.cache/wal"
-ITERMCOLOR_DIR="${CACHE_DIR}/itermcolors"
+cache_dir="${HOME}/.cache/wal"
+iterm_color_dir="${cache_dir}/itermcolors"
+mkdir -p "$iterm_color_dir"
 
-# create the directory
-mkdir -p $ITERMCOLOR_DIR
+# Filename for output.
+wal_filename="$(< "${cache_dir}/wal")"
+wal_filename="${wal_filename/*\/}"
+out_filename="${iterm_color_dir}/${wal_filename}.itermcolors"
 
-# Regexes for capturing groups from SCSS entries.
-INDEX_REGEX="color([0-9]{1,2})"
-COLOR_REGEX="\#([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2})"
+# Import colors
+c=($(< "${cache_dir}/colors.txt"))
+c=("${c[@]//\#}")
 
-# Filename for output
-WAL_FILENAME="$(basename `cat ${CACHE_DIR}/wal`)"
-OUT_FILENAME="$ITERMCOLOR_DIR/$WAL_FILENAME.itermcolors"
-
-export_itermcolors() {
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-    echo "<plist version=\"1.0\">"
-    echo "<dict>"
-
-    # Loop through colors in wal's cached colors.scss
-    for l in `cat ${HOME}/.cache/wal/colors.scss`
-    do
-        if [[ $l =~ $INDEX_REGEX ]]
-        then
-            index=${BASH_REMATCH[1]}
-
-            process=false
-        fi
-
-        if [[ $l =~ $COLOR_REGEX ]]
-        then
-            red=${BASH_REMATCH[1]}
-            green=${BASH_REMATCH[2]}
-            blue=${BASH_REMATCH[3]}
-
-            process=true
-        fi
-
-        if [ "$process" = true ]
-        then
-            red_real=$((16#${red}))/255
-            green_real=$((16#${green}))/255
-            blue_real=$((16#${blue}))/255
-
-            red_val=$(echo "$red_real" | bc -l)
-            green_val=$(echo "$green_real" | bc -l)
-            blue_val=$(echo "$blue_real" | bc -l)
-
-            echo "<key>Ansi ${index} Color</key>"
-            echo "<dict>"
-            echo "    <key>Red Component</key>"
-            echo "    <real>$red_val</real>"
-            echo "    <key>Green Component</key>"
-            echo "    <real>$green_val</real>"
-            echo "    <key>Blue Component</key>"
-            echo "    <real>$blue_val</real>"
-            echo "</dict>"
-
-            process=false
-        fi
-
-    done
-
-    echo "</dict>"
-    echo "</plist>"
+div () {
+    # Function to create RGB values without using bc.
+    if ((${1} == 255)); then
+        printf "%s\n" "1.0"
+    else
+        printf "%s\n" "0.$((${1:-0}0000000000000000/255))"
+    fi
 }
 
-export_itermcolors > $OUT_FILENAME
+export_iterm_colors() {
+    printf "%s\n" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    printf "%s\n" "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+    printf "%s\n" "<plist version=\"1.0\">"
+    printf "%s\n" "<dict>"
+
+    for col in "${c[@]}"; do
+        red="$(div "$((16#${col:1:2}))")"
+        green="$(div "$((16#${col:3:2}))")"
+        blue="$(div "$((16#${col:5:2}))")"
+
+        printf "%s\n" "        <key>Ansi ${num:-0} Color</key>"
+        printf "%s\n" "        <dict>"
+        printf "%s\n" "                <key>Blue Component</key>"
+        printf "%s\n" "                <real>${blue}</real>"
+        printf "%s\n" "                <key>Green Component</key>"
+        printf "%s\n" "                <real>${green}</real>"
+        printf "%s\n" "                <key>Red Component</key>"
+        printf "%s\n" "                <real>${red}</real>"
+        printf "%s\n" "        </dict>"
+
+        ((num++))
+    done
+
+    printf "%s\n" "</dict>"
+    printf "%s\n" "</plist>"
+}
+
+export_iterm_colors > "$out_filename"
