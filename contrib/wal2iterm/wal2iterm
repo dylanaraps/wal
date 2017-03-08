@@ -4,6 +4,10 @@
 #
 # Created by Joe Hopkinson
 
+# Speed up script by not using unicode.
+export LC_ALL=C
+export LANG=C
+
 # wal's cache directory
 cache_dir="${HOME}/.cache/wal"
 iterm_color_dir="${cache_dir}/itermcolors"
