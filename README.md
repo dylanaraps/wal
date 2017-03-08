@@ -15,20 +15,25 @@
 
 ## Table of Contents
 
-- **[Requirements](#requirements)**
-    - [Dependencies](#dependencies)
-    - [Terminal Emulator](#terminal-emulator)
-- **[Installation](#installation)**
-- **[Setup](#setup)**
-    - [Applying the Theme to New Terminals](#applying-the-theme-to-new-terminals)
-    - [Making the Colorscheme Persist on Reboot](#making-the-colorscheme-persist-on-reboot)
-- **[Usage](#usage)**
-- **[Customization](#customization)**
-    - [i3](#i3)
-    - [rofi](#rofi)
-    - [vim](#vim)
-    - [shell variables](#shell-variables)
-    - [scss variables](#scss-variables)
+<!-- vim-markdown-toc GFM -->
+* [Requirements](#requirements)
+    * [Dependencies](#dependencies)
+    * [Terminal Emulator](#terminal-emulator)
+* [Installation](#installation)
+* [Setup](#setup)
+    * [Applying the theme to new terminals.](#applying-the-theme-to-new-terminals)
+    * [Making the colorscheme persist on reboot.](#making-the-colorscheme-persist-on-reboot)
+* [Usage](#usage)
+* [Customization](#customization)
+    * [i3](#i3)
+    * [rofi](#rofi)
+    * [vim](#vim)
+    * [polybar](#polybar)
+    * [iTerm2](#iterm2)
+    * [Shell Variables](#shell-variables)
+    * [SCSS variables](#scss-variables)
+
+<!-- vim-markdown-toc -->
 
 
 ## Requirements
@@ -68,6 +73,7 @@ Just grab the script (`wal`) and add it to your path.
 
 ## Setup
 
+**NOTE:** If you get junk in your terminal, add `-t` to all of the `wal` commands.
 
 ### Applying the theme to new terminals.
 
@@ -211,6 +217,18 @@ Example:
 ```vim
 fg = ${xrdb:color7}
 bg = ${xrdb:color2}
+```
+
+### iTerm2
+
+There's a script called `wal2iterm` in `contrib/wal2iterm` which converts the generated colors to an importable iTerm2 colorscheme.
+
+The themes are stored in the `wal` cache directory. (`${HOME}/.cache/wal/itermcolors`).
+
+Example:
+
+```sh
+wal -i "IMAGE" -o "/path/to/wal2iterm/wal2iterm"
 ```
 
 
