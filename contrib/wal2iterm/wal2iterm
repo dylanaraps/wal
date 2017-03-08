@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# wal2iterm - Generates itermcolors from wal colors.scss cache files.
+# wal2iterm - Generates itermcolors from wal colors.
 #
 # Created by Joe Hopkinson
 
