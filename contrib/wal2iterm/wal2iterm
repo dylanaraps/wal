@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# wal2iterm - Generates itermcolors from wal colors.scss cache files.
+#
+# Created by Joe Hopkinson
+
+# wal's cache directory
+CACHE_DIR="${HOME}/.cache/wal"
+ITERMCOLOR_DIR="${CACHE_DIR}/itermcolors"
+
+# create the directory
+mkdir -p $ITERMCOLOR_DIR
+
+# Regexes for capturing groups from SCSS entries.
+INDEX_REGEX="color([0-9]{1,2})"
+COLOR_REGEX="\#([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2})"
+
+# Filename for output
+WAL_FILENAME="$(basename `cat ${CACHE_DIR}/wal`)"
+OUT_FILENAME="$ITERMCOLOR_DIR/$WAL_FILENAME.itermcolors"
+
+export_itermcolors() {
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    echo "<plist version=\"1.0\">"
+    echo "<dict>"
+
+    # Loop through colors in wal's cached colors.scss
+    for l in `cat ${HOME}/.cache/wal/colors.scss`
+    do
+        if [[ $l =~ $INDEX_REGEX ]]
+        then
+            index=${BASH_REMATCH[1]}
+
+            process=false
+        fi
+
+        if [[ $l =~ $COLOR_REGEX ]]
+        then
+            red=${BASH_REMATCH[1]}
+            green=${BASH_REMATCH[2]}
+            blue=${BASH_REMATCH[3]}
+
+            process=true
+        fi
+
+        if [ "$process" = true ]
+        then
+            red_real=$((16#${red}))/255
+            green_real=$((16#${green}))/255
+            blue_real=$((16#${blue}))/255
+
+            red_val=$(echo "$red_real" | bc -l)
+            green_val=$(echo "$green_real" | bc -l)
+            blue_val=$(echo "$blue_real" | bc -l)
+
+            echo "<key>Ansi ${index} Color</key>"
+            echo "<dict>"
+            echo "    <key>Red Component</key>"
+            echo "    <real>$red_val</real>"
+            echo "    <key>Green Component</key>"
+            echo "    <real>$green_val</real>"
+            echo "    <key>Blue Component</key>"
+            echo "    <real>$blue_val</real>"
+            echo "</dict>"
+
+            process=false
+        fi
+
+    done
+
+    echo "</dict>"
+    echo "</plist>"
+}
+
+export_itermcolors > $OUT_FILENAME
