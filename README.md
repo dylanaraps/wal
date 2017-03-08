@@ -32,6 +32,7 @@
     * [iTerm2](#iterm2)
     * [Shell Variables](#shell-variables)
     * [SCSS variables](#scss-variables)
+    * [Scripting](#scripting)
 
 <!-- vim-markdown-toc -->
 
@@ -276,4 +277,41 @@ body {
     background: $color0;
     color: $color7;
 }
+```
+
+### Scripting
+
+`wal` also exports the colors in a plain text format. This is helpful when you want use the plain colors in another script. See the script in `contrib/wal2iterm` for an example.
+
+The file is called `colors.txt` and just contains the hex values one per line in the order of 0-15.
+
+Example `colors.txt` file:
+
+```
+#0C2B32
+#9C7648
+#B78742
+#B4884D
+#AC8C64
+#D19D62
+#61828A
+#F0DEC0
+#666666
+#9C7648
+#B78742
+#B4884D
+#AC8C64
+#D19D62
+#61828A
+#F0DEC0
+```
+
+Example usage in a script:
+
+```sh
+# Create an array with the plain hex colors ordered 0-15.
+c=($(< "${cache_dir}/colors.txt"))
+
+# Remove the leading '#' if needed.
+c=("${c[@]//\#}")
 ```
