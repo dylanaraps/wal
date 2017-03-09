@@ -283,9 +283,9 @@ body {
 
 `wal` also exports the colors in a plain text format. This is helpful when you want use the plain colors in another script. See the script in `contrib/wal2iterm` for an example.
 
-The file is called `colors.txt` and just contains the hex values one per line in the order of 0-15.
+The file is called `colors` and just contains the hex values one per line in the order of 0-15.
 
-Example `colors.txt` file:
+Example `colors` file:
 
 ```
 #0C2B32
@@ -310,7 +310,7 @@ Example usage in a script:
 
 ```sh
 # Create an array with the plain hex colors ordered 0-15.
-c=($(< "${cache_dir}/colors.txt"))
+c=($(< "${cache_dir}/colors"))
 
 # Remove the leading '#' if needed.
 c=("${c[@]//\#}")

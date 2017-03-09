@@ -19,7 +19,7 @@ wal_filename="${wal_filename/*\/}"
 out_filename="${iterm_color_dir}/${wal_filename}.itermcolors"
 
 # Import colors
-c=($(< "${cache_dir}/colors.txt"))
+c=($(< "${cache_dir}/colors"))
 c=("${c[@]//\#}")
 
 div() {

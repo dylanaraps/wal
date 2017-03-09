@@ -221,11 +221,11 @@ export_plain() {
 }
 
 export_colors() {
-    export_sequences > "${cache_dir}/colors"
+    export_sequences > "${cache_dir}/sequences"
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
     export_rofi
-    export_plain     > "${cache_dir}/colors.txt"
+    export_plain     > "${cache_dir}/colors"
 }
 
 
@@ -233,7 +233,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${HOME}/.cache/wal/colors")"
+    sequences="$(< "${HOME}/.cache/wal/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
