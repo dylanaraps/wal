@@ -2,7 +2,7 @@
 #
 # wal2iterm - Generates itermcolors from wal colors.
 #
-# Created by Joe Hopkinson
+# Based on 'coal', https://github.com/dylanaraps/coal
 
 # Speed up script by not using unicode.
 export LC_ALL=C

@@ -1,6 +1,6 @@
 ## 9 March
 
-- Added script to export colors as iTerm2 colorscheme. @joethecodhr 
+- Added script to export colors as iTerm2 colorscheme. @joethecodhr
 
 ## 28 January
 
