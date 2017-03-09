@@ -1,6 +1,7 @@
 ## 9 March
 
 - Added script to export colors as iTerm2 colorscheme. @joethecodhr
+- Added a color file that just contains plain hex values for the colors.
 
 ## 28 January
 
@@ -23,4 +24,3 @@
 ## 15 January
 
 - Fixed issues with directory shuffle.
-
