@@ -1,3 +1,9 @@
+## 11 March
+
+- Added transparency support for Rofi using `-a`.
+- Supressed error when `xprop` wasn't installed.
+- Supressed error that occurs only on first run.
+
 ## 9 March
 
 - Added script to export colors as iTerm2 colorscheme. @joethecodhr
