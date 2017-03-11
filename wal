@@ -41,7 +41,7 @@ get_colors() {
     mkdir -p "${cache_dir}/schemes"
 
     # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
+    [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
 
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
