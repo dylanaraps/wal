@@ -1,3 +1,7 @@
+## 12 March
+
+- `wal` no longer errors/exits when a palette isn't found. Instead `wal` will loop trying larger palette sizes until it finds a suitable 16 colors. Wallpapers that didn't work previously will now work just fine.
+
 ## 11 March
 
 - Added transparency support for Rofi using `-a`.
