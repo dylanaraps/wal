@@ -38,9 +38,9 @@ export_iterm_colors() {
     printf "%s\n" "<dict>"
 
     for col in "${c[@]}"; do
-        red="$(div "$((16#${col:1:2}))")"
-        green="$(div "$((16#${col:3:2}))")"
         blue="$(div "$((16#${col:5:2}))")"
+        green="$(div "$((16#${col:3:2}))")"
+        red="$(div "$((16#${col:1:2}))")"
 
         printf "%s\n" "        <key>Ansi ${num:-0} Color</key>"
         printf "%s\n" "        <dict>"
