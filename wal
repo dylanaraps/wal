@@ -29,6 +29,12 @@ rand_img() {
     files=("${wal%/}"/*.{png,jpg,jpeg,jpe})
     files=("${files[@]/"$old_wall"}")
 
+    # If no files were found, exit.
+    if ((${#files[@]} == 0)); then
+        out "error: No images were found, exiting..."
+        exit 1
+    fi
+
     # Reset glob.
     shopt -u nullglob
 
@@ -40,6 +46,13 @@ rand_img() {
 }
 
 get_colors() {
+    # Check for imagemagick.
+    if ! type -p convert >/dev/null 2>&1; then
+        out "error: imagemagick not found, exiting..."
+        out "error: wal requires imagemagick to function."
+        exit 1
+    fi
+
     # Create the cache dir.
     mkdir -p "${cache_dir}/schemes"
 
