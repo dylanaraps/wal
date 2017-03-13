@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# wal2iterm - Generates itermcolors from wal colors.
+#
+# Based on 'coal', https://github.com/dylanaraps/coal
+
+# Speed up script by not using unicode.
+export LC_ALL=C
+export LANG=C
+
+# wal's cache directory
+cache_dir="${HOME}/.cache/wal"
+iterm_color_dir="${cache_dir}/itermcolors"
+mkdir -p "$iterm_color_dir"
+
+# Filename for output.
+wal_filename="$(< "${cache_dir}/wal")"
+wal_filename="${wal_filename/*\/}"
+out_filename="${iterm_color_dir}/${wal_filename}.itermcolors"
+
+# Import colors
+c=($(< "${cache_dir}/colors"))
+c=("${c[@]//\#}")
+
+div() {
+    # Function to create RGB values without using bc.
+    if ((${1} == 255)); then
+        printf "%s\n" "1.0"
+    else
+        printf "%s\n" "0.$((${1:-0}0000000000000000/255))"
+    fi
+}
+
+export_iterm_colors() {
+    printf "%s\n" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    printf "%s\n" "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+    printf "%s\n" "<plist version=\"1.0\">"
+    printf "%s\n" "<dict>"
+
+    for col in "${c[@]}"; do
+        blue="$(div "$((16#${col:5:2}))")"
+        green="$(div "$((16#${col:3:2}))")"
+        red="$(div "$((16#${col:1:2}))")"
+
+        printf "%s\n" "        <key>Ansi ${num:-0} Color</key>"
+        printf "%s\n" "        <dict>"
+        printf "%s\n" "                <key>Blue Component</key>"
+        printf "%s\n" "                <real>${blue}</real>"
+        printf "%s\n" "                <key>Green Component</key>"
+        printf "%s\n" "                <real>${green}</real>"
+        printf "%s\n" "                <key>Red Component</key>"
+        printf "%s\n" "                <real>${red}</real>"
+        printf "%s\n" "        </dict>"
+
+        ((num++))
+    done
+
+    printf "%s\n" "</dict>"
+    printf "%s\n" "</plist>"
+}
+
+export_iterm_colors > "$out_filename"

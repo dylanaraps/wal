@@ -8,27 +8,33 @@
 
 **NOTE:** `wal` is not perfect and won't work with some images.
 
-[Album of examples (Warning large)](http://imgur.com/a/ttSOb)
+[Albums of examples (Warning large)](https://dylanaraps.com/pages/rice)
 
 ![screen](http://i.imgur.com/4aLsvvW.png)
 
 
 ## Table of Contents
 
-- **[Requirements](#requirements)**
-    - [Dependencies](#dependencies)
-    - [Terminal Emulator](#terminal-emulator)
-- **[Installation](#installation)**
-- **[Setup](#setup)**
-    - [Applying the Theme to New Terminals](#applying-the-theme-to-new-terminals)
-    - [Making the Colorscheme Persist on Reboot](#making-the-colorscheme-persist-on-reboot)
-- **[Usage](#usage)**
-- **[Customization](#customization)**
-    - [i3](#i3)
-    - [rofi](#rofi)
-    - [vim](#vim)
-    - [shell variables](#shell-variables)
-    - [scss variables](#scss-variables)
+<!-- vim-markdown-toc GFM -->
+* [Requirements](#requirements)
+    * [Dependencies](#dependencies)
+    * [Terminal Emulator](#terminal-emulator)
+* [Installation](#installation)
+* [Setup](#setup)
+    * [Applying the theme to new terminals.](#applying-the-theme-to-new-terminals)
+    * [Making the colorscheme persist on reboot.](#making-the-colorscheme-persist-on-reboot)
+* [Usage](#usage)
+* [Customization](#customization)
+    * [i3](#i3)
+    * [rofi](#rofi)
+    * [vim](#vim)
+    * [polybar](#polybar)
+    * [iTerm2](#iterm2)
+    * [Shell Variables](#shell-variables)
+    * [SCSS variables](#scss-variables)
+    * [Scripting](#scripting)
+
+<!-- vim-markdown-toc -->
 
 
 ## Requirements
@@ -68,6 +74,7 @@ Just grab the script (`wal`) and add it to your path.
 
 ## Setup
 
+**NOTE:** If you get junk in your terminal, add `-t` to all of the `wal` commands.
 
 ### Applying the theme to new terminals.
 
@@ -103,14 +110,13 @@ wal -i "$(< "${HOME}/.cache/wal/wal")"
 
 Run `wal` and point it to either a directory (`wal -i "path/to/dir"`) or an image (`wal -i "/path/to/img.jpg"`) and that's all. `wal` will change your wallpaper for you and also set your terminal colors.
 
-**NOTE:** If you're running a terminal that is **not** URxvt or Xterm then look above at the line you must add to your shell rc file.
-
 ```sh
 Usage: wal [OPTION] -i '/path/to/dir'
 Example: wal -i '${HOME}/Pictures/Wallpapers/'
          wal -i '${HOME}/Pictures/1.jpg'
 
 Flags:
+  -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
@@ -203,6 +209,29 @@ Plug 'dylanaraps/wal'
 colorscheme wal
 ```
 
+### polybar
+
+Polybar can read colors from `Xresources` to set the bar's colors.
+
+Example:
+
+```vim
+fg = ${xrdb:color7}
+bg = ${xrdb:color2}
+```
+
+### iTerm2
+
+There's a script called `wal2iterm` in `contrib/wal2iterm` which converts the generated colors to an importable iTerm2 colorscheme.
+
+The themes are stored in the `wal` cache directory. (`${HOME}/.cache/wal/itermcolors`).
+
+Example:
+
+```sh
+wal -i "IMAGE" -o "/path/to/wal2iterm/wal2iterm"
+```
+
 
 ### Shell Variables
 
@@ -248,4 +277,41 @@ body {
     background: $color0;
     color: $color7;
 }
+```
+
+### Scripting
+
+`wal` also exports the colors in a plain text format. This is helpful when you want use the plain colors in another script. See the script in `contrib/wal2iterm` for an example.
+
+The file is called `colors` and just contains the hex values one per line in the order of 0-15.
+
+Example `colors` file:
+
+```
+#0C2B32
+#9C7648
+#B78742
+#B4884D
+#AC8C64
+#D19D62
+#61828A
+#F0DEC0
+#666666
+#9C7648
+#B78742
+#B4884D
+#AC8C64
+#D19D62
+#61828A
+#F0DEC0
+```
+
+Example usage in a script:
+
+```sh
+# Create an array with the plain hex colors ordered 0-15.
+c=($(< "${cache_dir}/colors"))
+
+# Remove the leading '#' if needed.
+c=("${c[@]//\#}")
 ```

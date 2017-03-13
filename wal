@@ -19,9 +19,6 @@ newline=$'\n'
 
 
 rand_img() {
-    # Get the current wallpaper.
-    old_wall="$(< "${cache_dir}/wal")"
-
     # Make glob fails silent.
     shopt -s nullglob
 
@@ -43,6 +40,8 @@ rand_img() {
 
     # Set the image to the first in the directory if the shuffle failes.
     [[ ! -f "$wal" ]] && wal="${files[0]}"
+
+    out "image: Using image, $wal"
 }
 
 get_colors() {
@@ -56,11 +55,17 @@ get_colors() {
     # Create the cache dir.
     mkdir -p "${cache_dir}/schemes"
 
+    # Get the current wallpaper.
+    [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
+
     # Shuffle the image.
     [[ -d "$wal" ]] && rand_img
 
+    # If the wallpaper doesn't exist, use the current one.
+    [[ ! -f "$wal" ]] && wal="$old_wall"
+
     # Store cached colorscheme as 'dir-to-img.jpg'
-    cache_file="${cache_dir}/schemes/${wal//\//-}"
+    cache_file="${cache_dir}/schemes/${wal//\//_}"
 
     # Cache the wallpaper name
     printf "%s\n" "$wal" > "${cache_dir}/wal"
@@ -71,18 +76,16 @@ get_colors() {
     else
         colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
 
+        # If imagemagick finds less than 16 colors, use a larger source number of colors.
+        while (( "${#colors[@]}" <= 15 )); do
+            colors=($(convert "${wal}"  +dither -colors "$((16 + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
+            ((index++))
+            out "colors: Imagemagick couldn't generate a 16 color palette, trying a larger palette size ($((16 + index)))."
+        done
+
         # Cache the scheme.
         printf "%s\n" "${colors[@]}" > "$cache_file"
     fi
-
-    # If imagemagick finds less than 16 colors, abort and warn the user.
-    (( "${#colors[@]}" <= 15 )) && {
-        out "Error: Imagemagick failed to generate a 16 color palette for ${wal##*/}"
-        out "Error: Imagemagick could only generate a ${#colors[@]} color palette."
-        out "Error: wal won't do guesswork to fill in the blanks."
-        out "Error: Please try a different image."
-        exit 1
-    }
 
     out "colors: Generated colorscheme"
 }
@@ -96,6 +99,7 @@ set_color() {
     x_colors+="*color${1}: ${2}${newline}"
     sh_colors+="color${1}='${2}'${newline}"
     scss_colors+="\$color${1}: ${2};${newline}"
+    plain+="${2}${newline}"
 }
 
 set_special() {
@@ -112,13 +116,13 @@ set_special() {
 send_sequences() {
     # Create string of escape sequences to send to the terminals.
     set_special 10  "${colors[15]}"
-    set_special 11  "${colors[0]}"
+    set_special 11  "${alpha:+[${alpha}]}${colors[0]}"
     set_special 12  "${colors[15]}"
     set_special 13  "${colors[15]}"
-    set_special 14  "${colors[0]}"
+    set_special 14  "${alpha:+[${alpha}]}${colors[0]}"
 
     # This escape sequence doesn't work in VTE terminals.
-    [[ "$vte" != "on" ]] && set_special 708 "${colors[0]}"
+    [[ "$vte" != "on" ]] && set_special 708 "${alpha:+[${alpha}]}${colors[0]}"
 
     set_color 0  "${colors[0]}"
     set_color 1  "${colors[9]}"
@@ -128,13 +132,6 @@ send_sequences() {
     set_color 5  "${colors[13]}"
     set_color 6  "${colors[14]}"
     set_color 7  "${colors[15]}"
-    set_color 9  "${colors[9]}"
-    set_color 10 "${colors[10]}"
-    set_color 11 "${colors[11]}"
-    set_color 12 "${colors[12]}"
-    set_color 13 "${colors[13]}"
-    set_color 14 "${colors[14]}"
-    set_color 15 "${colors[15]}"
 
     # Create a comment color based on the brightness of the background.
     case "${colors[0]:1:1}" in
@@ -145,6 +142,14 @@ send_sequences() {
         [6-9]) set_color 8 "#a1a1a1" ;;
         *)     set_color 8 "${colors[7]}" ;;
     esac
+
+    set_color 9  "${colors[9]}"
+    set_color 10 "${colors[10]}"
+    set_color 11 "${colors[11]}"
+    set_color 12 "${colors[12]}"
+    set_color 13 "${colors[13]}"
+    set_color 14 "${colors[14]}"
+    set_color 15 "${colors[15]}"
 
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
@@ -160,7 +165,8 @@ set_wallpaper() {
     de="${XDG_CURRENT_DESKTOP}"
 
     # Fallback to using xprop.
-    [[ -z "$de" ]] && de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
+    [[ -z "$de" ]] && type -p xprop >/dev/null 2>&1 && \
+        de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
 
     case "$de" in
         *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
@@ -217,17 +223,24 @@ export_scss() {
 }
 
 export_rofi() {
-    x_colors+="rofi.color-window: ${colors[0]}, ${colors[0]}, ${colors[10]}${newline}"
-    x_colors+="rofi.color-normal: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
-    x_colors+="rofi.color-active: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
-    x_colors+="rofi.color-urgent: ${colors[0]}, ${colors[15]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
+    rofi_bg="argb:${alpha:-FF}${colors[0]/\#}"
+    x_colors+="rofi.color-window: ${rofi_bg}, ${colors[0]}, ${colors[10]}${newline}"
+    x_colors+="rofi.color-normal: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
+    x_colors+="rofi.color-active: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
+    x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
+}
+
+export_plain() {
+    printf "%s" "$plain"
+    out "export: Exported plain colors"
 }
 
 export_colors() {
-    export_sequences > "${cache_dir}/colors"
+    export_sequences > "${cache_dir}/sequences"
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
     export_rofi
+    export_plain     > "${cache_dir}/colors"
 }
 
 
@@ -235,7 +248,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${HOME}/.cache/wal/colors")"
+    sequences="$(< "${HOME}/.cache/wal/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
@@ -250,6 +263,8 @@ reload_env() {
 }
 
 reload_xrdb() {
+    [[ "$alpha" ]] && x_colors+="URxvt.depth: 32${newline}"
+
     # Merge the colors into the X db so new terminals use them.
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
@@ -289,6 +304,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
          wal -i '${HOME}/Pictures/1.jpg'
 
 Flags:
+  -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
@@ -302,8 +318,9 @@ Flags:
 }
 
 get_args() {
-    while getopts ":chi:o:qrt" opt; do
+    while getopts ":a:chi:o:qrt" opt; do
         case "$opt" in
+            "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
             "h") usage; exit 1 ;;
 
