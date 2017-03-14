@@ -81,7 +81,7 @@ get_colors() {
         while (( "${#colors[@]}" <= 15 )); do
             colors=($(convert "${wal}"  +dither -colors "$((color_count + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
             ((index++))
-            out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($(($color_count + index)))."
+            out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($((color_count + index)))."
         done
 
         # Cache the scheme.
