@@ -13,6 +13,7 @@ shopt -s nullglob nocasematch
 # Internal variables.
 cache_dir="${HOME}/.cache/wal"
 newline=$'\n'
+color_count=16
 
 
 # GENERATE COLORSCHEME
@@ -74,13 +75,13 @@ get_colors() {
     if [[ -f "$cache_file" ]]; then
         colors=($(< "$cache_file"))
     else
-        colors=($(convert "${wal}"  +dither -colors 16 -unique-colors txt:- | grep -E -o " \#.{6}"))
+        colors=($(convert "${wal}"  +dither -colors $color_count -unique-colors txt:- | grep -E -o " \#.{6}"))
 
         # If imagemagick finds less than 16 colors, use a larger source number of colors.
         while (( "${#colors[@]}" <= 15 )); do
-            colors=($(convert "${wal}"  +dither -colors "$((16 + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
+            colors=($(convert "${wal}"  +dither -colors "$((color_count + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
             ((index++))
-            out "colors: Imagemagick couldn't generate a 16 color palette, trying a larger palette size ($((16 + index)))."
+            out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($(($color_count + index)))."
         done
 
         # Cache the scheme.
