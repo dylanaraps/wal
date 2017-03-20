@@ -11,4 +11,4 @@ os:
     - linux
 
 script:
-    - shellcheck wal
+    - shellcheck wal contrib/wal2iterm/wal2iterm
