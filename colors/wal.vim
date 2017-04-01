@@ -6,12 +6,12 @@
 hi clear
 set background=dark
 
-if exists("syntax_on")
+if exists('syntax_on')
     syntax reset
 endif
 
 " Colorscheme name
-let colors_name = "wal"
+let g:colors_name = 'wal'
 
 " highlight groups {{{
 
@@ -173,5 +173,9 @@ hi SignifySignChange ctermbg=NONE ctermfg=4 cterm=NONE
 hi SignifySignDelete ctermbg=NONE ctermfg=1 cterm=NONE
 hi NERDTreeDirSlash ctermbg=NONE ctermfg=4 cterm=NONE
 hi NERDTreeExecFile ctermbg=NONE ctermfg=7 cterm=NONE
+hi ALEErrorSign ctermbg=NONE ctermfg=1 cterm=NONE
+hi ALEWarningSign ctermbg=NONE ctermfg=3 cterm=NONE
+hi ALEError ctermbg=NONE ctermfg=1 cterm=NONE
+hi ALEWarning ctermbg=NONE ctermfg=3 cterm=NONE
 
 " }}}
