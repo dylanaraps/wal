@@ -1,3 +1,9 @@
+## 2 April
+
+- Rewrite `wal2iterm` script.
+    - Theme output is correct now.
+    - We now also generate Foreground, Background, Cursor and Selection colors.
+
 ## 12 March
 
 - `wal` no longer errors/exits when a palette isn't found. Instead `wal` will loop trying larger palette sizes until it finds a suitable 16 colors. Wallpapers that didn't work previously will now work just fine.
