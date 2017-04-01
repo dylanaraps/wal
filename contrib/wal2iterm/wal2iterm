@@ -58,8 +58,8 @@ export_iterm_colors() {
     done
 
     # Background Color
-	printf "%s\n" "        <key>Background Color</key>"
-	printf "%s\n" "        <dict>"
+    printf "%s\n" "        <key>Background Color</key>"
+    printf "%s\n" "        <dict>"
     printf "%s\n" "                <key>Color Space</key>"
     printf "%s\n" "                <string>sRGB</string>"
     printf "%s\n" "                <key>Blue Component</key>"
@@ -68,11 +68,11 @@ export_iterm_colors() {
     printf "%s\n" "                <real>$(div "$((16#${c[0]:2:2}))")</real>"
     printf "%s\n" "                <key>Red Component</key>"
     printf "%s\n" "                <real>$(div "$((16#${c[0]:0:2}))")</real>"
-	printf "%s\n" "        </dict>"
+    printf "%s\n" "        </dict>"
 
     # Foreground Color
-	printf "%s\n" "        <key>Foreground Color</key>"
-	printf "%s\n" "        <dict>"
+    printf "%s\n" "        <key>Foreground Color</key>"
+    printf "%s\n" "        <dict>"
     printf "%s\n" "                <key>Color Space</key>"
     printf "%s\n" "                <string>sRGB</string>"
     printf "%s\n" "                <key>Blue Component</key>"
@@ -81,7 +81,7 @@ export_iterm_colors() {
     printf "%s\n" "                <real>$(div "$((16#${c[15]:2:2}))")</real>"
     printf "%s\n" "                <key>Red Component</key>"
     printf "%s\n" "                <real>$(div "$((16#${c[15]:0:2}))")</real>"
-	printf "%s\n" "        </dict>"
+    printf "%s\n" "        </dict>"
 
     printf "%s\n" "</dict>"
     printf "%s\n" "</plist>"
