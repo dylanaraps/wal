@@ -24,10 +24,10 @@ c=("${c[@]//\#}")
 
 div() {
     # Function to create RGB values without using bc.
-    if ((${1} == 255)); then
+    if (("${1}" == 255)); then
         printf "%s\n" "1.0"
     else
-        printf "%s\n" "0.$((${1:-0}0000000000000000/255))"
+        printf "%s\n" "0.$((${1:-0}0000000000000000 / 255))"
     fi
 }
 
@@ -38,12 +38,14 @@ export_iterm_colors() {
     printf "%s\n" "<dict>"
 
     for col in "${c[@]}"; do
-        blue="$(div "$((16#${col:5:2}))")"
-        green="$(div "$((16#${col:3:2}))")"
-        red="$(div "$((16#${col:1:2}))")"
+        blue="$(div "$((16#${col:4:2}))")"
+        green="$(div "$((16#${col:2:2}))")"
+        red="$(div "$((16#${col:0:2}))")"
 
         printf "%s\n" "        <key>Ansi ${num:-0} Color</key>"
         printf "%s\n" "        <dict>"
+        printf "%s\n" "                <key>Color Space</key>"
+        printf "%s\n" "                <string>sRGB</string>"
         printf "%s\n" "                <key>Blue Component</key>"
         printf "%s\n" "                <real>${blue}</real>"
         printf "%s\n" "                <key>Green Component</key>"
@@ -54,6 +56,32 @@ export_iterm_colors() {
 
         ((num++))
     done
+
+    # Background Color
+	printf "%s\n" "        <key>Background Color</key>"
+	printf "%s\n" "        <dict>"
+    printf "%s\n" "                <key>Color Space</key>"
+    printf "%s\n" "                <string>sRGB</string>"
+    printf "%s\n" "                <key>Blue Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[0]:4:2}))")</real>"
+    printf "%s\n" "                <key>Green Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[0]:2:2}))")</real>"
+    printf "%s\n" "                <key>Red Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[0]:0:2}))")</real>"
+	printf "%s\n" "        </dict>"
+
+    # Foreground Color
+	printf "%s\n" "        <key>Foreground Color</key>"
+	printf "%s\n" "        <dict>"
+    printf "%s\n" "                <key>Color Space</key>"
+    printf "%s\n" "                <string>sRGB</string>"
+    printf "%s\n" "                <key>Blue Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[15]:4:2}))")</real>"
+    printf "%s\n" "                <key>Green Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[15]:2:2}))")</real>"
+    printf "%s\n" "                <key>Red Component</key>"
+    printf "%s\n" "                <real>$(div "$((16#${c[15]:0:2}))")</real>"
+	printf "%s\n" "        </dict>"
 
     printf "%s\n" "</dict>"
     printf "%s\n" "</plist>"
