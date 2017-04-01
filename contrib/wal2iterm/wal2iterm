@@ -31,6 +31,24 @@ div() {
     fi
 }
 
+set_color() {
+    blue="$(div "$((16#${2:4:2}))")"
+    green="$(div "$((16#${2:2:2}))")"
+    red="$(div "$((16#${2:0:2}))")"
+
+    printf "%s\n" "        <key>${1}</key>"
+    printf "%s\n" "        <dict>"
+    printf "%s\n" "                <key>Color Space</key>"
+    printf "%s\n" "                <string>sRGB</string>"
+    printf "%s\n" "                <key>Blue Component</key>"
+    printf "%s\n" "                <real>${blue}</real>"
+    printf "%s\n" "                <key>Green Component</key>"
+    printf "%s\n" "                <real>${green}</real>"
+    printf "%s\n" "                <key>Red Component</key>"
+    printf "%s\n" "                <real>${red}</real>"
+    printf "%s\n" "        </dict>"
+}
+
 export_iterm_colors() {
     printf "%s\n" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     printf "%s\n" "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
@@ -38,50 +56,17 @@ export_iterm_colors() {
     printf "%s\n" "<dict>"
 
     for col in "${c[@]}"; do
-        blue="$(div "$((16#${col:4:2}))")"
-        green="$(div "$((16#${col:2:2}))")"
-        red="$(div "$((16#${col:0:2}))")"
-
-        printf "%s\n" "        <key>Ansi ${num:-0} Color</key>"
-        printf "%s\n" "        <dict>"
-        printf "%s\n" "                <key>Color Space</key>"
-        printf "%s\n" "                <string>sRGB</string>"
-        printf "%s\n" "                <key>Blue Component</key>"
-        printf "%s\n" "                <real>${blue}</real>"
-        printf "%s\n" "                <key>Green Component</key>"
-        printf "%s\n" "                <real>${green}</real>"
-        printf "%s\n" "                <key>Red Component</key>"
-        printf "%s\n" "                <real>${red}</real>"
-        printf "%s\n" "        </dict>"
-
+        set_color "Ansi ${num:-0} Color" "$col"
         ((num++))
     done
 
     # Background Color
-    printf "%s\n" "        <key>Background Color</key>"
-    printf "%s\n" "        <dict>"
-    printf "%s\n" "                <key>Color Space</key>"
-    printf "%s\n" "                <string>sRGB</string>"
-    printf "%s\n" "                <key>Blue Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[0]:4:2}))")</real>"
-    printf "%s\n" "                <key>Green Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[0]:2:2}))")</real>"
-    printf "%s\n" "                <key>Red Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[0]:0:2}))")</real>"
-    printf "%s\n" "        </dict>"
-
-    # Foreground Color
-    printf "%s\n" "        <key>Foreground Color</key>"
-    printf "%s\n" "        <dict>"
-    printf "%s\n" "                <key>Color Space</key>"
-    printf "%s\n" "                <string>sRGB</string>"
-    printf "%s\n" "                <key>Blue Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[15]:4:2}))")</real>"
-    printf "%s\n" "                <key>Green Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[15]:2:2}))")</real>"
-    printf "%s\n" "                <key>Red Component</key>"
-    printf "%s\n" "                <real>$(div "$((16#${c[15]:0:2}))")</real>"
-    printf "%s\n" "        </dict>"
+    set_color "Background Color" "${c[0]}"
+    set_color "Foreground Color" "${c[15]}"
+    set_color "Cursor Color" "${c[15]}"
+    set_color "Cursor Text Color" "${c[0]}"
+    set_color "Selection Color" "${c[15]}"
+    set_color "Selection Text Color" "${c[0]}"
 
     printf "%s\n" "</dict>"
     printf "%s\n" "</plist>"
