@@ -38,8 +38,6 @@ set_color() {
 
     printf "%s\n" "        <key>${1}</key>"
     printf "%s\n" "        <dict>"
-    printf "%s\n" "                <key>Color Space</key>"
-    printf "%s\n" "                <string>sRGB</string>"
     printf "%s\n" "                <key>Blue Component</key>"
     printf "%s\n" "                <real>${blue}</real>"
     printf "%s\n" "                <key>Green Component</key>"
