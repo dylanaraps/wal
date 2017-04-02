@@ -10,7 +10,13 @@
 export LC_ALL=C
 export LANG=C
 
-# wal's cache directory
+# Check for 'bc'.
+bc -h >/dev/null 2>&1 || {
+    printf "%s\n" "Error: wal2iterm requires 'bc' to generate a scheme."
+    exit 1
+}
+
+# wal's cache directory.
 cache_dir="${HOME}/.cache/wal"
 iterm_color_dir="${cache_dir}/itermcolors"
 mkdir -p "$iterm_color_dir"
