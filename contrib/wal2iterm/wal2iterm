@@ -55,7 +55,7 @@ export_iterm_colors() {
     printf "%s\n" "<plist version=\"1.0\">"
     printf "%s\n" "<dict>"
 
-    # Colors 0-15
+    # Colors 0-15.
     for col in "${c[@]}"; do
         set_color "Ansi ${num:-0} Color" "$col"
         ((num++))
