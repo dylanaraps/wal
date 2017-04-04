@@ -24,6 +24,7 @@ c=("${c[@]//\#}")
 
 div() {
     # Function to do floating point division in bash.
+    counter=0
     result="$((${1} / 255))"
     printf "%s" "$result"
     multiply="$((result * 255))"
