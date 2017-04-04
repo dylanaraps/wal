@@ -3,18 +3,10 @@
 # wal2iterm - Generates itermcolors from wal colors.
 #
 # Based on 'coal', https://github.com/dylanaraps/coal
-#
-# Depends on: bc
 
 # Speed up script by not using unicode.
 export LC_ALL=C
 export LANG=C
-
-# Check for 'bc'.
-bc -h >/dev/null 2>&1 || {
-    printf "%s\n" "Error: wal2iterm requires 'bc' to generate a scheme."
-    exit 1
-}
 
 # wal's cache directory.
 cache_dir="${HOME}/.cache/wal"
@@ -30,11 +22,24 @@ out_filename="${iterm_color_dir}/${wal_filename}.itermcolors"
 c=($(< "${cache_dir}/colors"))
 c=("${c[@]//\#}")
 
+div() {
+    # Function to do floating point division in bash.
+    result="$((${1} / 255))"
+    printf "%s" "$result"
+    multiply="$((result * 255))"
+
+    ((counter == 0 && multiply != ${1})) && printf "%s" "."
+    ((${1} == multiply || counter == 17)) && return
+    ((counter++))
+
+    div "$(((${1} - multiply) * 10))" 255
+}
+
 set_color() {
     # Split the hex color into RGB and convert it to decimal.
-    blue="0$(bc -l <<< "$((16#${2:4:2}))/255")"
-    green="0$(bc -l <<< "$((16#${2:2:2}))/255")"
-    red="0$(bc -l <<< "$((16#${2:0:2}))/255")"
+    blue="$(div "$((16#${2:4:2}))")"
+    green="$(div "$((16#${2:2:2}))")"
+    red="$(div "$((16#${2:0:2}))")"
 
     printf "%s\n" "        <key>${1}</key>"
     printf "%s\n" "        <dict>"
