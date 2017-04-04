@@ -384,7 +384,7 @@ main () {
     reload_env >/dev/null 2>&1
 
     # Execute custom script.
-    sh -c "${external_script[@]}"
+    bash -c "${external_script[@]}"
 }
 
 main "$@"
