@@ -5,6 +5,7 @@
 # Created by Dylan Araps
 
 # Speed up script by not using unicode.
+sys_locale="$LANG"
 export LC_ALL=C
 export LANG=C
 
@@ -383,8 +384,11 @@ main () {
     # Reload env
     reload_env >/dev/null 2>&1
 
+    # Set the locale back to the original value.
+    export LC_ALL="$sys_locale"
+
     # Execute custom script.
-    bash -c "${external_script[@]}"
+    [[ "${external_script[0]}" ]] && bash -c "${external_script[@]}"
 }
 
 main "$@"
