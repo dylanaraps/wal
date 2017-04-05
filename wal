@@ -366,22 +366,11 @@ get_args() {
 main () {
     get_args "$@"
 
-    # Get 16 unique colors from the image.
     get_colors
-
-    # Send the color changing sequences to every open terminal emulator.
     send_sequences
-
-    # Set the wallpaper.
     set_wallpaper
-
-    # Export the colors in other formats.
     export_colors
-
-    # Merge colors into X env.
     reload_xrdb
-
-    # Reload env
     reload_env >/dev/null 2>&1
 
     # Set the locale back to the original value.
