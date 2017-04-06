@@ -1,3 +1,8 @@
+## 6 April
+
+- Fixed `wal -o` and unicode characters.
+- Fixed error when `-o` was empty.
+
 ## 2 April
 
 - Rewrite `wal2iterm` script.
