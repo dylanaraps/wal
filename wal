@@ -163,46 +163,52 @@ send_sequences() {
 }
 
 set_wallpaper() {
-    # Get desktop environment.
-    de="${XDG_CURRENT_DESKTOP}"
+    
+    if [[ "$nowall" != "on" ]]
+    then
+        # Get desktop environment.
+        de="${XDG_CURRENT_DESKTOP}"
 
-    # Fallback to using xprop.
-    [[ -z "$de" ]] && type -p xprop >/dev/null 2>&1 && \
-        de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
+        # Fallback to using xprop.
+        [[ -z "$de" ]] && type -p xprop >/dev/null 2>&1 && \
+            de="$(xprop -root | awk '/KDE_SESSION_VERSION|^_MUFFIN|xfce4|xfce5/')"
 
-    case "$de" in
-        *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
-        *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
-        *"GNOME"*) gsettings set org.gnome.desktop.background picture-uri "file://${wal}" ;;
+        case "$de" in
+            *"MUFFIN"* | *"Cinnamon"*) gsettings set org.cinnamon.desktop.background picture-uri "file://${wal}" ;;
+            *"MATE"*) gsettings set org.mate.background picture-filename "$wal" ;;
+            *"GNOME"*) gsettings set org.gnome.desktop.background picture-uri "file://${wal}" ;;
 
-        *"XFCE"*)
-            xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" 2>/dev/null ||\
-            xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set "$wal" 2>/dev/null
-        ;;
+            *"XFCE"*)
+                xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" 2>/dev/null ||\
+                xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set "$wal" 2>/dev/null
+            ;;
 
-        *)
-            if type -p feh >/dev/null; then
-                feh --bg-fill "$wal"
+            *)
+                if type -p feh >/dev/null; then
+                    feh --bg-fill "$wal"
 
-            elif type -p nitrogen >/dev/null; then
-                nitrogen --set-zoom-fill "$wal"
+                elif type -p nitrogen >/dev/null; then
+                    nitrogen --set-zoom-fill "$wal"
 
-            elif type -p bgs >/dev/null; then
-                bgs "$wal"
+                elif type -p bgs >/dev/null; then
+                    bgs "$wal"
 
-            elif type -p hsetroot >/dev/null; then
-                hsetroot -fill "$wal"
+                elif type -p hsetroot >/dev/null; then
+                    hsetroot -fill "$wal"
 
-            elif type -p habak >/dev/null; then
-                habak -mS "$wal"
+                elif type -p habak >/dev/null; then
+                    habak -mS "$wal"
 
-            else
-                gsettings set org.gnome.desktop.background picture-uri "file://${wal}"
-            fi
-        ;;
-    esac
+                else
+                    gsettings set org.gnome.desktop.background picture-uri "file://${wal}"
+                fi
+            ;;
+        esac
 
-    out "wallpaper: Set new wallpaper"
+        out "wallpaper: Set new wallpaper"
+    else
+        out "skipping wallpaper"
+    fi
 }
 
 
@@ -308,6 +314,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -n                      Skip setting the wallpaper.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
@@ -320,7 +327,7 @@ Flags:
 }
 
 get_args() {
-    while getopts ":a:chi:o:qrt" opt; do
+    while getopts ":a:chi:o:qrtn" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
@@ -335,6 +342,7 @@ get_args() {
             "q") quiet="on" ;;
             "r") reload="on" ;;
             "t") vte="on" ;;
+            "n") nowall="on" ;;
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2

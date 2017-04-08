@@ -118,6 +118,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -n                      Skip setting the wallpaper.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
