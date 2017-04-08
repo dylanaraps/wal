@@ -8,7 +8,7 @@
 export LC_ALL=C
 export LANG=C
 
-# wal's cache directory
+# wal's cache directory.
 cache_dir="${HOME}/.cache/wal"
 iterm_color_dir="${cache_dir}/itermcolors"
 mkdir -p "$iterm_color_dir"
@@ -23,15 +23,21 @@ c=($(< "${cache_dir}/colors"))
 c=("${c[@]//\#}")
 
 div() {
-    # Function to create RGB values without using bc.
-    if (("${1}" == 255)); then
-        printf "%s\n" "1.0"
-    else
-        printf "%s\n" "0.$((${1:-0}0000000000000000 / 255))"
-    fi
+    # Function to do floating point division in bash.
+    counter=0
+    result="$((${1} / 255))"
+    printf "%s" "$result"
+    multiply="$((result * 255))"
+
+    ((counter == 0 && multiply != ${1})) && printf "%s" "."
+    ((${1} == multiply || counter == 17)) && return
+    ((counter++))
+
+    div "$(((${1} - multiply) * 10))" 255
 }
 
 set_color() {
+    # Split the hex color into RGB and convert it to decimal.
     blue="$(div "$((16#${2:4:2}))")"
     green="$(div "$((16#${2:2:2}))")"
     red="$(div "$((16#${2:0:2}))")"
@@ -55,7 +61,7 @@ export_iterm_colors() {
     printf "%s\n" "<plist version=\"1.0\">"
     printf "%s\n" "<dict>"
 
-    # Colors 0-15
+    # Colors 0-15.
     for col in "${c[@]}"; do
         set_color "Ansi ${num:-0} Color" "$col"
         ((num++))
