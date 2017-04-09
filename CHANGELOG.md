@@ -1,3 +1,7 @@
+## 10 April
+
+- Added `-n` to skip wallpaper setting. @hallgat89
+
 ## 6 April
 
 - Fixed `wal -o` and unicode characters.
