@@ -164,8 +164,8 @@ send_sequences() {
 
 set_wallpaper() {
     
-    if [[ "$nowall" != "on" ]]
-    then
+    if [[ -z "$nowall" ]]; then
+
         # Get desktop environment.
         de="${XDG_CURRENT_DESKTOP}"
 
@@ -207,7 +207,7 @@ set_wallpaper() {
 
         out "wallpaper: Set new wallpaper"
     else
-        out "skipping wallpaper"
+        out "wallpaper: '-n' was used, skipping wallpaper"
     fi
 }
 
@@ -327,7 +327,7 @@ Flags:
 }
 
 get_args() {
-    while getopts ":a:chi:o:qrtn" opt; do
+    while getopts ":a:chi:no:qrt" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
@@ -337,12 +337,13 @@ get_args() {
                 [[ -f "${PWD}/${OPTARG/*\/}" ]] && wal="${PWD}/${OPTARG/*\/}"
                 [[ -z "$wal" ]] && wal="$(get_full_path "$OPTARG")"
             ;;
-
+            
+            "n") nowall="on" ;;
             "o") external_script=("$OPTARG") ;;
             "q") quiet="on" ;;
             "r") reload="on" ;;
             "t") vte="on" ;;
-            "n") nowall="on" ;;
+
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2
