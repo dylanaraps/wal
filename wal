@@ -163,7 +163,6 @@ send_sequences() {
 }
 
 set_wallpaper() {
-    
     if [[ -z "$nowall" ]]; then
 
         # Get desktop environment.
@@ -343,7 +342,6 @@ get_args() {
             "q") quiet="on" ;;
             "r") reload="on" ;;
             "t") vte="on" ;;
-
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2
