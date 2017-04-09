@@ -164,7 +164,6 @@ send_sequences() {
 
 set_wallpaper() {
     if [[ -z "$nowall" ]]; then
-
         # Get desktop environment.
         de="${XDG_CURRENT_DESKTOP}"
 
@@ -336,7 +335,7 @@ get_args() {
                 [[ -f "${PWD}/${OPTARG/*\/}" ]] && wal="${PWD}/${OPTARG/*\/}"
                 [[ -z "$wal" ]] && wal="$(get_full_path "$OPTARG")"
             ;;
-            
+
             "n") nowall="on" ;;
             "o") external_script=("$OPTARG") ;;
             "q") quiet="on" ;;
