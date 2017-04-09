@@ -1,6 +1,7 @@
 ## 10 April
 
 - Added `-n` to skip wallpaper setting. @hallgat89
+- Added support for setting macOS wallpaper. @lpon
 
 ## 6 April
 

@@ -199,12 +199,12 @@ set_wallpaper() {
 
                 elif [[ "$os" == "Darwin" ]]; then
                     osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"${wal/#\~/$HOME}"\"
-                    
+
                 else
                     gsettings set org.gnome.desktop.background picture-uri "file://${wal}"
                 fi
             ;;
-        esac              
+        esac
 
         out "wallpaper: Set new wallpaper"
     else
