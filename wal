@@ -15,7 +15,7 @@ shopt -s nullglob nocasematch
 cache_dir="${HOME}/.cache/wal"
 newline=$'\n'
 color_count=16
-
+os="$(uname)"
 
 # GENERATE COLORSCHEME
 
@@ -196,7 +196,7 @@ set_wallpaper() {
             elif type -p habak >/dev/null; then
                 habak -mS "$wal"
 
-            elif (($(uname) == "Darwin")); then
+            elif [[ "$os" == "Darwin" ]]; then
                 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"${wal/#\~/$HOME}"\"
 
             else
