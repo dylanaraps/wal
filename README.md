@@ -78,7 +78,7 @@ Just grab the script (`wal`) and add it to your path.
 
 ### Applying the theme to new terminals.
 
-`wal` only applies the new colors to the currently open terminals. Any new terminal windows you open won't be using the new theme unless you add a single line to your shell's start up file. (`.bashrc`, `.zshrc` and etc.) The `-r` flags tells `wal` to find the current colorscheme inside the cache and then set it for the new terminal.
+`wal` only applies the new colors to the currently open terminals. Any new terminal windows you open won't be using the new theme unless you add a single line to your shell's start up file. (`.bashrc`, `.zshrc` etc.) The `-r` flags tells `wal` to find the current colorscheme inside the cache and then set it for the new terminal.
 
 Add this line to your shell startup file. (`.bashrc`, `.zshrc` or etc.)
 
