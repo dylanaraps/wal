@@ -177,7 +177,7 @@ set_wallpaper() {
             *"GNOME"*) gsettings set org.gnome.desktop.background picture-uri "file://${wal}" ;;
 
             *"XFCE"*)
-                xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" 2>/dev/null ||\
+                xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/image-path --set "$wal" 2>/dev/null
                 xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set "$wal" 2>/dev/null
             ;;
 
