@@ -1,3 +1,7 @@
+## 11 April
+
+- Fixed wallpaper not being set correctly on XFCE.
+
 ## 10 April
 
 - Added `-n` to skip wallpaper setting. @hallgat89
