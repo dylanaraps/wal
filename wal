@@ -234,9 +234,9 @@ export_scss() {
 export_rofi() {
     rofi_bg="argb:${alpha:-FF}${colors[0]/\#}"
     x_colors+="rofi.color-window: ${rofi_bg}, ${colors[0]}, ${colors[10]}${newline}"
-    x_colors+="rofi.color-normal: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
-    x_colors+="rofi.color-active: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[15]}${newline}"
-    x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
+    x_colors+="rofi.color-normal: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[0]}${newline}"
+    x_colors+="rofi.color-active: ${rofi_bg}, ${colors[15]}, ${colors[0]}, ${colors[10]}, ${colors[0]}${newline}"
+    x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[9]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
 }
 
 export_plain() {
