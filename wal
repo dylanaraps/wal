@@ -101,6 +101,7 @@ set_color() {
     x_colors+="*color${1}: ${2}${newline}"
     sh_colors+="color${1}='${2}'${newline}"
     scss_colors+="\$color${1}: ${2};${newline}"
+    firefox_colors+="  --color${1}: ${2};${newline}"
     plain+="${2}${newline}"
 }
 
@@ -231,6 +232,11 @@ export_scss() {
     out "export: Exported scss color variables"
 }
 
+export_firefox() {
+    printf "%s\n" ":root {${newline}${firefox_colors}}"
+    out "export: Exported Firefox color variables"
+}
+
 export_rofi() {
     rofi_bg="argb:${alpha:-FF}${colors[0]/\#}"
     x_colors+="rofi.color-window: ${rofi_bg}, ${colors[0]}, ${colors[10]}${newline}"
@@ -248,6 +254,7 @@ export_colors() {
     export_sequences > "${cache_dir}/sequences"
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
+    export_firefox   > "${cache_dir}/firefox.css"
     export_rofi
     export_plain     > "${cache_dir}/colors"
 }
