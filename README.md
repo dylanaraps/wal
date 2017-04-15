@@ -32,6 +32,7 @@
     * [iTerm2](#iterm2)
     * [Shell Variables](#shell-variables)
     * [SCSS variables](#scss-variables)
+    * [Firefox variables](#firefox-variables)
     * [Scripting](#scripting)
 
 <!-- vim-markdown-toc -->
@@ -279,6 +280,26 @@ body {
     color: $color7;
 }
 ```
+
+### Firefox variables
+
+`wal` also exports the colors as Firefox CSS variables for use with Stylish or userChrome.css.
+
+Example Firefox CSS:
+
+```css
+/* Import the CSS file.
+   NOTE: This must be at line 1 of your Firefox stylesheet. */
+@import "file:///home/dylan/.cache/wal/firefox.css";
+
+/* Use the variables */
+#nav-bar {
+    background-color: var(--color3) !important;
+    color: var(--color7) !important;
+}
+
+```
+
 
 ### Scripting
 
