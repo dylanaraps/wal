@@ -17,6 +17,7 @@ newline=$'\n'
 color_count=16
 os="$(uname)"
 
+
 # GENERATE COLORSCHEME
 
 
@@ -245,6 +246,27 @@ export_rofi() {
     x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[9]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
 }
 
+export_oomox() {
+    printf "%s\n" "NAME=wal"
+    printf "%s\n" "BG=${colors[0]/\#}"
+    printf "%s\n" "FG=${colors[15]/\#}"
+    printf "%s\n" "MENU_BG=${colors[0]/\#}"
+    printf "%s\n" "MENU_FG=${colors[15]/\#}"
+    printf "%s\n" "SEL_BG=${colors[3]/\#}"
+    printf "%s\n" "SEL_FG=${colors[15]/\#}"
+    printf "%s\n" "TXT_BG=${colors[3]/\#}"
+    printf "%s\n" "TXT_FG=${colors[15]/\#}"
+    printf "%s\n" "BTN_BG=${colors[1]/\#}"
+    printf "%s\n" "BTN_FG=${colors[15]/\#}"
+    printf "%s\n" "HDR_BTN_BG=${colors[1]/\#}"
+    printf "%s\n" "HDR_BTN_FG=${colors[15]/\#}"
+    printf "%s\n" "GTK3_GENERATE_DARK=False"
+    printf "%s\n" "ROUNDNESS=0"
+    printf "%s\n" "SPACING=3"
+    printf "%s\n" "GRADIENT=0.0"
+    out "export: Exported Oomox colors"
+}
+
 export_plain() {
     printf "%s" "$plain"
     out "export: Exported plain colors"
@@ -255,12 +277,14 @@ export_colors() {
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
     export_firefox   > "${cache_dir}/firefox.css"
+    export_oomox     > "${cache_dir}/wal-oomox"
     export_rofi
     export_plain     > "${cache_dir}/colors"
 }
 
 
 # RELOAD COLORSCHEME
+
 
 reload_colors() {
     # Source the current sequences
@@ -276,6 +300,9 @@ reload_colors() {
 reload_env() {
     # Reload i3 if running.
     pgrep i3 && i3-msg reload &
+
+    # Generate GTK Scheme.
+    exists oomox-cli && oomox-cli -o wal-oomox "${cache_dir}/wal-oomox" &
 }
 
 reload_xrdb() {
@@ -286,7 +313,13 @@ reload_xrdb() {
         out "colors: Merged colors with X env"
 }
 
+
 # OTHER
+
+
+exists() {
+    type -p "$1" >/dev/null 2>&1
+}
 
 get_full_path() {
     # Go to the relative PATH.
