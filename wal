@@ -112,7 +112,7 @@ set_special() {
     case "$1" in
         10) x_colors+="*foreground: ${2}${newline}" ;;
         11) x_colors+="*background: ${2}${newline}" ;;
-        12) x_colors+="*cursor: ${2}${newline}" ;;
+        12) x_colors+="*cursorColor: ${2}${newline}" ;;
     esac
 }
 
