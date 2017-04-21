@@ -254,7 +254,7 @@ export_oomox() {
     printf "%s\n" "MENU_FG=${colors[15]/\#}"
     printf "%s\n" "SEL_BG=${colors[3]/\#}"
     printf "%s\n" "SEL_FG=${colors[15]/\#}"
-    printf "%s\n" "TXT_BG=${colors[3]/\#}"
+    printf "%s\n" "TXT_BG=${colors[0]/\#}"
     printf "%s\n" "TXT_FG=${colors[15]/\#}"
     printf "%s\n" "BTN_BG=${colors[1]/\#}"
     printf "%s\n" "BTN_FG=${colors[15]/\#}"
@@ -302,7 +302,10 @@ reload_env() {
     pgrep i3 && i3-msg reload &
 
     # Generate GTK Scheme.
-    exists oomox-cli && oomox-cli -o wal-oomox "${cache_dir}/wal-oomox" &
+    if exists oomox-cli; then
+        oomox-cli -o wal "${cache_dir}/wal-oomox"
+        reload_gtk
+    fi
 }
 
 reload_xrdb() {
@@ -311,6 +314,21 @@ reload_xrdb() {
     # Merge the colors into the X db so new terminals use them.
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
+}
+
+reload_gtk(){
+type -p python2 >/dev/null 2>&1 || return
+
+python2 - <<END
+import sys, gtk
+
+events=gtk.gdk.Event(gtk.gdk.CLIENT_EVENT)
+data=gtk.gdk.atom_intern("_GTK_READ_RCFILES", False)
+events.data_format=8
+events.send_event=True
+events.message_type=data
+events.send_clientmessage_toall()
+END
 }
 
 
@@ -420,7 +438,7 @@ main () {
     set_wallpaper
     export_colors
     reload_xrdb
-    reload_env >/dev/null 2>&1
+    reload_env >/dev/null 2>&1 &
 
     # Set the locale back to the original value.
     export LC_ALL="$sys_locale"
