@@ -24,7 +24,7 @@ c=("${c[@]//\#}")
 
 div() {
     # Function to do floating point division in bash.
-    counter=0
+    counter="${2}"
     result="$((${1} / 255))"
     printf "%s" "$result"
     multiply="$((result * 255))"
@@ -33,14 +33,14 @@ div() {
     ((${1} == multiply || counter == 17)) && return
     ((counter++))
 
-    div "$(((${1} - multiply) * 10))" 255
+    div "$(((${1} - multiply) * 10))" $counter
 }
 
 set_color() {
     # Split the hex color into RGB and convert it to decimal.
-    blue="$(div "$((16#${2:4:2}))")"
-    green="$(div "$((16#${2:2:2}))")"
-    red="$(div "$((16#${2:0:2}))")"
+    blue="$(div "$((16#${2:4:2}))" 0)"
+    green="$(div "$((16#${2:2:2}))" 0)"
+    red="$(div "$((16#${2:0:2}))" 0)"
 
     printf "%s\n" "        <key>${1}</key>"
     printf "%s\n" "        <dict>"
