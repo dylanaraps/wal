@@ -1,3 +1,8 @@
+## 24 April
+
+- Fixed `wal` causing `gitk` to crash on startup.
+- Fixed counter error in `wal2iterm` `div` recursive call. @lpon
+
 ## 11 April
 
 - Fixed wallpaper not being set correctly on XFCE.
