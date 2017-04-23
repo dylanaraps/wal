@@ -33,7 +33,7 @@ div() {
     ((${1} == multiply || counter == 17)) && return
     ((counter++))
 
-    div "$(((${1} - multiply) * 10))" $counter
+    div "$(((${1} - multiply) * 10))" "$counter"
 }
 
 set_color() {
