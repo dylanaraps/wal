@@ -299,6 +299,15 @@ reload_xrdb() {
 
 # OTHER
 
+kill_old() {
+    # Kill old 'wal' instances.
+    pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
+
+    for pid in "${pids[@]}"; do
+        [[ "$pid" != "$$" ]] && kill "$pid" 2>/dev/null
+    done
+}
+
 get_full_path() {
     # Go to the relative PATH.
     if ! cd "${1%/*}"; then
@@ -392,6 +401,7 @@ get_args() {
 
 main () {
     get_args "$@"
+    kill_old
 
     get_colors
     send_sequences
