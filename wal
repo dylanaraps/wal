@@ -83,6 +83,9 @@ get_colors() {
             colors=($(convert "${wal}"  +dither -colors "$((color_count + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
             ((index++))
             out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($((color_count + index)))."
+
+            # Quit the loop if we're taking too long.
+            ((index == 10)) && break
         done
 
         # Cache the scheme.
@@ -304,7 +307,10 @@ kill_old() {
     pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
 
     for pid in "${pids[@]}"; do
-        [[ "$pid" != "$$" ]] && kill "$pid" 2>/dev/null
+        if [[ "$pid" != "$$" ]]; then
+            pkill -TERM -P "$pid" 2>/dev/null
+            kill "$pid" 2>/dev/null
+        fi
     done
 }
 
