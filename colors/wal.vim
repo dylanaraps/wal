@@ -179,3 +179,9 @@ hi ALEError ctermbg=NONE ctermfg=1 cterm=NONE
 hi ALEWarning ctermbg=NONE ctermfg=3 cterm=NONE
 
 " }}}
+
+" Plugin options {{{
+
+let g:limelight_conceal_ctermfg = 8
+
+" }}}
