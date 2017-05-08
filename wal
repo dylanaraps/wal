@@ -168,6 +168,10 @@ send_sequences() {
     set_color 14 "${colors[14]}"
     set_color 15 "${colors[15]}"
 
+    # Set a black color that isn't affected by bold highlighting.
+    sequences+="\033]4;66;${colors[0]}\007"
+    x_colors+="*color66: ${colors[0]}${newline}"
+
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
     for term in /dev/pts/[0-9]*; do
