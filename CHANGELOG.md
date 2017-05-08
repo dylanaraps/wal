@@ -1,3 +1,7 @@
+## 8 May
+
+- [vim] Added support for Airline and Limelight.
+
 ## 24 April
 
 - Fixed `wal` causing `gitk` to crash on startup.
