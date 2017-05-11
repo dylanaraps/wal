@@ -46,8 +46,8 @@ let g:airline#themes#wal#palette.replace.airline_error = s:WI
 " Tabline
 let g:airline#themes#wal#palette.tabline = {
       \ 'airline_tab':     [ '', '', 4, 0, 'BOLD' ],
-      \ 'airline_tabsel':  [ '', '', 4, 0, 'BOLD' ],
-      \ 'airline_tabtype': [ '', '', 66, 0, 'BOLD' ],
+      \ 'airline_tabsel':  [ '', '', 66, 4, 'BOLD' ],
+      \ 'airline_tabtype': [ '', '', 66, 4, 'BOLD' ],
       \ 'airline_tabfill': [ '', '', 4, 0, 'BOLD' ],
       \ 'airline_tabmod':  [ '', '', 4, 0, 'BOLD' ]
 \ }
