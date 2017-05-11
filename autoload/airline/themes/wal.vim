@@ -2,21 +2,25 @@
 let g:airline#themes#wal#palette = {}
 
 " Normal mode
-let s:N = [ '', '', 66, 4, 'BOLD' ]
+let s:N  = [ '', '', 66, 4, 'BOLD' ]
+let s:N2 = [ '', '', 4, 66, 'BOLD' ]
 
 " Insert mode
-let s:I = [ '', '', 66, 2, 'BOLD' ]
+let s:I  = [ '', '', 66, 2, 'BOLD' ]
+let s:I2 = [ '', '', 2, 66, 'BOLD' ]
 
 " Visual mode
-let s:V = [ '', '', 66, 1, 'BOLD' ]
+let s:V  = [ '', '', 66, 1, 'BOLD' ]
+let s:V2 = [ '', '', 1, 66, 'BOLD' ]
 
 " Replace mode
-let s:R = [ '', '', 66, 5, 'BOLD' ]
+let s:R  = [ '', '', 66, 5, 'BOLD' ]
+let s:R2 = [ '', '', 5, 66, 'BOLD' ]
 
-let g:airline#themes#wal#palette.normal  = airline#themes#generate_color_map(s:N, s:N, s:N)
-let g:airline#themes#wal#palette.insert  = airline#themes#generate_color_map(s:I, s:I, s:I)
-let g:airline#themes#wal#palette.visual  = airline#themes#generate_color_map(s:V, s:V, s:V)
-let g:airline#themes#wal#palette.replace = airline#themes#generate_color_map(s:R, s:R, s:R)
+let g:airline#themes#wal#palette.normal  = airline#themes#generate_color_map(s:N, s:N2, s:N2)
+let g:airline#themes#wal#palette.insert  = airline#themes#generate_color_map(s:I, s:I2, s:I2)
+let g:airline#themes#wal#palette.visual  = airline#themes#generate_color_map(s:V, s:V2, s:V2)
+let g:airline#themes#wal#palette.replace = airline#themes#generate_color_map(s:R, s:R2, s:R2)
 
 let g:airline#themes#wal#palette.accents = { 'red': [ '', '', 0, 2, 'BOLD' ] }
 
