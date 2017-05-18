@@ -47,30 +47,33 @@ rand_img() {
 }
 
 get_colors() {
-    # Check for imagemagick.
-    if ! type -p convert >/dev/null 2>&1; then
-        out "error: imagemagick not found, exiting..."
-        out "error: wal requires imagemagick to function."
-        exit 1
+    # Only run if -i used, skip for -f since $wal not set and $cache_file already set.
+    if [[ -n "$wal" ]]; then
+        # Check for imagemagick.
+        if ! type -p convert >/dev/null 2>&1; then
+            out "error: imagemagick not found, exiting..."
+            out "error: wal requires imagemagick to function."
+            exit 1
+        fi
+
+        # Create the cache dir.
+        mkdir -p "${cache_dir}/schemes"
+
+        # Get the current wallpaper.
+        [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
+
+        # Shuffle the image.
+        [[ -d "$wal" ]] && rand_img
+
+        # If the wallpaper doesn't exist, use the current one.
+        [[ ! -f "$wal" ]] && wal="$old_wall"
+
+        # Store cached colorscheme as 'dir-to-img.jpg'
+        cache_file="${cache_dir}/schemes/${wal//\//_}"
+
+        # Cache the wallpaper name
+        printf "%s\n" "$wal" > "${cache_dir}/wal"
     fi
-
-    # Create the cache dir.
-    mkdir -p "${cache_dir}/schemes"
-
-    # Get the current wallpaper.
-    [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
-
-    # Shuffle the image.
-    [[ -d "$wal" ]] && rand_img
-
-    # If the wallpaper doesn't exist, use the current one.
-    [[ ! -f "$wal" ]] && wal="$old_wall"
-
-    # Store cached colorscheme as 'dir-to-img.jpg'
-    cache_file="${cache_dir}/schemes/${wal//\//_}"
-
-    # Cache the wallpaper name
-    printf "%s\n" "$wal" > "${cache_dir}/wal"
 
     # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
@@ -352,6 +355,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -f '/path/to/colors'    Load colors directly from a colorscheme file.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
@@ -365,10 +369,15 @@ Flags:
 }
 
 get_args() {
-    while getopts ":a:chi:no:qrt" opt; do
+    while getopts ":a:cf:hi:no:qrt" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
+            "f")
+                [[ -f "$OPTARG" ]] && cache_file="$OPTARG"
+                [[ -z "$cache_file" ]] && cache_file="$(get_full_path "$OPTARG")"
+                nowall="on"
+            ;;
             "h") usage; exit 1 ;;
 
             "i")
@@ -398,8 +407,8 @@ get_args() {
     [[ "$reload" == "on" ]] && reload_colors
 
     # Check if -i was used.
-    if [[ -z "$wal" ]]; then
-        printf "%s\n" "Error: 'wal' must be run with '-i'" >&2
+    if [[ -z "$wal" && -z "$cache_file" || -n "$wal" && -n "$cache_file" ]]; then
+        printf "%s\n" "Error: 'wal' must be run with either '-i' or '-f'" >&2
         printf "%s\n" "Try 'wal -h' for more information." >&2
         exit 1
     fi

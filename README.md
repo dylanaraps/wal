@@ -119,6 +119,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -f '/path/to/colors'    Load colors directly from a colorscheme file.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
@@ -336,4 +337,17 @@ c=($(< "${cache_dir}/colors"))
 
 # Remove the leading '#' if needed.
 c=("${c[@]//\#}")
+```
+
+
+### Custom Switcher
+
+You can also manually create your own `colors` files and load them directly with the `wal -f` option to quickly switch between your favorite colorschemes without changing the background.
+
+```sh
+# Switch to previously saved Monokai colorscheme
+wal -f "$HOME/.colors/monokai"
+
+# Switch to previously saved Solarized colorscheme
+wal -f "$HOME/.colors/solarized"
 ```

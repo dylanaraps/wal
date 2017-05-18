@@ -1,3 +1,7 @@
+## 17 May
+
+- Added `-f` to load `colors` files directly without using or changing the background image. @mreinhardt
+
 ## 8 May
 
 - [vim] Added support for Airline and Limelight.
