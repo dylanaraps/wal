@@ -49,7 +49,7 @@ let g:airline#themes#wal#palette.tabline = {
       \ 'airline_tabsel':  [ '', '', 66, 4, 'BOLD' ],
       \ 'airline_tabtype': [ '', '', 66, 4, 'BOLD' ],
       \ 'airline_tabfill': [ '', '', 4, 0, 'BOLD' ],
-      \ 'airline_tabmod':  [ '', '', 4, 0, 'BOLD' ]
+      \ 'airline_tabmod':  [ '', '', 66, 4, 'BOLD' ]
 \ }
 
 if !get(g:, 'loaded_ctrlp', 0)
