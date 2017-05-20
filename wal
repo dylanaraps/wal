@@ -145,23 +145,36 @@ send_sequences() {
     [[ "$vte" != "on" ]] && set_special 708 "${alpha:+[${alpha}]}${colors[0]}"
 
     set_color 0  "${colors[0]}"
-    set_color 1  "${colors[9]}"
-    set_color 2  "${colors[10]}"
-    set_color 3  "${colors[11]}"
-    set_color 4  "${colors[12]}"
-    set_color 5  "${colors[13]}"
-    set_color 6  "${colors[14]}"
-    set_color 7  "${colors[15]}"
 
-    # Create a comment color based on the brightness of the background.
-    case "${colors[0]:1:1}" in
-        [0-1]) set_color 8 "#666666" ;;
-        2)     set_color 8 "#757575" ;;
-        [3-4]) set_color 8 "#999999" ;;
-        5)     set_color 8 "#8a8a8a" ;;
-        [6-9]) set_color 8 "#a1a1a1" ;;
-        *)     set_color 8 "${colors[7]}" ;;
-    esac
+    # If $extended_colors isn't set, only use the bright colors.
+    if [[ -z "$extended_colors" ]]; then
+        set_color 1  "${colors[9]}"
+        set_color 2  "${colors[10]}"
+        set_color 3  "${colors[11]}"
+        set_color 4  "${colors[12]}"
+        set_color 5  "${colors[13]}"
+        set_color 6  "${colors[14]}"
+        set_color 7  "${colors[15]}"
+
+        # Create a comment color based on the brightness of the background.
+        case "${colors[0]:1:1}" in
+            [0-1]) set_color 8 "#666666" ;;
+            2)     set_color 8 "#757575" ;;
+            [3-4]) set_color 8 "#999999" ;;
+            5)     set_color 8 "#8a8a8a" ;;
+            [6-9]) set_color 8 "#a1a1a1" ;;
+            *)     set_color 8 "${colors[7]}" ;;
+        esac
+    else  # $extended_colors="on"
+        set_color 1  "${colors[1]}"
+        set_color 2  "${colors[2]}"
+        set_color 3  "${colors[3]}"
+        set_color 4  "${colors[4]}"
+        set_color 5  "${colors[5]}"
+        set_color 6  "${colors[6]}"
+        set_color 7  "${colors[7]}"
+        set_color 8  "${colors[8]}"
+    fi
 
     set_color 9  "${colors[9]}"
     set_color 10 "${colors[10]}"
@@ -364,12 +377,13 @@ Flags:
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
+  -x                      Use extended 16-color palette.
 
 "
 }
 
 get_args() {
-    while getopts ":a:cf:hi:no:qrt" opt; do
+    while getopts ":a:cf:hi:no:qrtx" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
@@ -390,6 +404,7 @@ get_args() {
             "q") quiet="on" ;;
             "r") reload="on" ;;
             "t") vte="on" ;;
+            "x") extended_colors="on" ;;
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2

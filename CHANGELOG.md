@@ -1,3 +1,7 @@
+## 20 May
+
+- Added `-x` to use extended 16-color palette. @mreinhardt
+
 ## 17 May
 
 - Added `-f` to load `colors` files directly without using or changing the background image. @mreinhardt
