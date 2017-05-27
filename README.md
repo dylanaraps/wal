@@ -128,6 +128,7 @@ Flags:
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
+  -x                      Use extended 16-color palette.
 
 ```
 
