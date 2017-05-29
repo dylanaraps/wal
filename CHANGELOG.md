@@ -1,3 +1,7 @@
+## 29 May
+
+- Emacs: Add support for setting Emacs fg and bg @ben01189998819991197253
+
 ## 20 May
 
 - Added `-x` to use extended 16-color palette. @mreinhardt
