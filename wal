@@ -279,6 +279,11 @@ export_rofi() {
     x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[9]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
 }
 
+export_emacs() {
+    x_colors+="emacs*background: ${colors[0]}${newline}"
+    x_colors+="emacs*foreground: ${colors[15]}${newline}"
+}
+
 export_plain() {
     printf "%s" "$plain"
     out "export: Exported plain colors"
@@ -290,6 +295,7 @@ export_colors() {
     export_scss      > "${cache_dir}/colors.scss"
     export_firefox   > "${cache_dir}/firefox.css"
     export_rofi
+    export_emacs
     export_plain     > "${cache_dir}/colors"
 }
 

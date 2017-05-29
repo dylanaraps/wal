@@ -28,6 +28,7 @@
     * [i3](#i3)
     * [rofi](#rofi)
     * [vim](#vim)
+    * [Emacs](#emacs)
     * [polybar](#polybar)
     * [iTerm2](#iterm2)
     * [Shell Variables](#shell-variables)
@@ -212,6 +213,10 @@ Plug 'dylanaraps/wal'
 
 colorscheme wal
 ```
+
+### Emacs
+
+Install [this package](https://github.com/cqql/xresources-theme), which will make Emacs use your X environment's colors instead of its default colors.
 
 ### polybar
 
