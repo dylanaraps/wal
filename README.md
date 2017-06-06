@@ -297,7 +297,7 @@ Example Firefox CSS:
 ```css
 /* Import the CSS file.
    NOTE: This must be at line 1 of your Firefox stylesheet. */
-@import url('file:///home/dylan/.cache/wal/firefox.css)
+@import url('file:///home/dylan/.cache/wal/firefox.css')
 
 /* Use the variables */
 #nav-bar {
