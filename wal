@@ -333,7 +333,7 @@ kill_old() {
     pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
 
     for pid in "${pids[@]}"; do
-        if [[ "$pid" != "$$" ]]; then
+        if [[ "$pid" != "$$" && "$pid" != "$PPID" ]]; then
             pkill -TERM -P "$pid" 2>/dev/null
             kill "$pid" 2>/dev/null
         fi
