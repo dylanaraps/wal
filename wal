@@ -191,7 +191,7 @@ send_sequences() {
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
     for term in /dev/pts/[0-9]*; do
-        printf "%b" "$sequences" > "$term" &
+        [[ -w "$term" ]] && printf "%b" "$sequences" > "$term" &
     done
 
     out "colors: Set terminal colors"
