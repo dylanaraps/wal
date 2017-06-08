@@ -108,7 +108,7 @@ hi htmlItalic ctermbg=NONE ctermfg=5 cterm=NONE
 hi htmlEndTag ctermbg=NONE ctermfg=7 cterm=NONE
 hi htmlTag ctermbg=NONE ctermfg=7 cterm=NONE
 hi htmlTagName ctermbg=NONE ctermfg=1 cterm=BOLD
-hi htmlH1 ctermbg=NONE ctermfg=7 cterm=BOLD
+hi htmlH1 ctermbg=NONE ctermfg=7 cterm=NONE
     hi link htmlH2 htmlH1
     hi link htmlH3 htmlH1
     hi link htmlH4 htmlH1
@@ -137,6 +137,12 @@ hi sassMixinName ctermbg=NONE ctermfg=4 cterm=NONE
 hi javaScript ctermbg=NONE ctermfg=7 cterm=NONE
 hi javaScriptBraces ctermbg=NONE ctermfg=7 cterm=NONE
 hi javaScriptNumber ctermbg=NONE ctermfg=5 cterm=NONE
+hi markdownH1 ctermbg=NONE ctermfg=7 cterm=NONE
+    hi link markdownH2 markdownH1
+    hi link markdownH3 markdownH1
+    hi link markdownH4 markdownH1
+    hi link markdownH5 markdownH1
+    hi link markdownH6 markdownH1
 hi markdownAutomaticLink ctermbg=NONE ctermfg=1 cterm=underline
     hi link markdownUrl markdownAutomaticLink
 hi markdownError ctermbg=NONE ctermfg=7 cterm=NONE
