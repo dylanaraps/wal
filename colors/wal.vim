@@ -28,7 +28,7 @@ hi Special ctermbg=NONE ctermfg=6 cterm=NONE
 hi Statement ctermbg=NONE ctermfg=1 cterm=NONE
 hi String ctermbg=NONE ctermfg=2 cterm=NONE
 hi Number ctermbg=NONE ctermfg=3 cterm=NONE
-hi Todo ctermbg=8 ctermfg=3 cterm=NONE
+hi Todo ctermbg=1 ctermfg=0 cterm=NONE
 hi Type ctermbg=NONE ctermfg=3 cterm=NONE
 hi Underlined ctermbg=NONE ctermfg=1 cterm=underline
 hi StatusLine ctermbg=7 ctermfg=0 cterm=NONE
