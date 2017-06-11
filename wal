@@ -13,6 +13,7 @@ shopt -s nullglob nocasematch
 
 # Internal variables.
 cache_dir="${HOME}/.cache/wal"
+pid_file="${cache_dir}/wal.pid"
 newline=$'\n'
 color_count=16
 os="$(uname)"
@@ -56,7 +57,7 @@ get_colors() {
             exit 1
         fi
 
-        # Create the cache dir.
+        # Create colorscheme dir.
         mkdir -p "${cache_dir}/schemes"
 
         # Get the current wallpaper.
@@ -304,7 +305,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${HOME}/.cache/wal/sequences")"
+    sequences="$(< "${cache_dir}/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
@@ -328,16 +329,16 @@ reload_xrdb() {
 
 # OTHER
 
-kill_old() {
+kill_old_log_new () {
     # Kill old 'wal' instances.
-    pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
+    if [ -e "$pid_file" ]; then
+      old_pid="$(< "${pid_file}")"
+      pkill -TERM -P "$old_pid" 2>/dev/null
+      kill "$old_pid" 2>/dev/null
+      rm "$pid_file"
+    fi
 
-    for pid in "${pids[@]}"; do
-        if [[ "$pid" != "$$" && "$pid" != "$PPID" ]]; then
-            pkill -TERM -P "$pid" 2>/dev/null
-            kill "$pid" 2>/dev/null
-        fi
-    done
+    printf "$$" > "$pid_file"
 }
 
 get_full_path() {
@@ -441,7 +442,7 @@ get_args() {
 
 main () {
     get_args "$@"
-    kill_old
+    kill_old_log_new
 
     get_colors
     send_sequences
@@ -455,6 +456,8 @@ main () {
 
     # Execute custom script.
     [[ "${external_script[0]}" ]] && bash -c "${external_script[@]}"
+
+
 }
 
 main "$@"
