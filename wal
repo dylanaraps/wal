@@ -326,8 +326,11 @@ reload_xrdb() {
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
 }
-
 # OTHER
+
+cleanup_pid () {
+  rm "$pid_file"
+}
 
 kill_old_log_new () {
     # Kill old 'wal' instances.
@@ -335,12 +338,11 @@ kill_old_log_new () {
       old_pid="$(< "${pid_file}")"
       pkill -TERM -P "$old_pid" 2>/dev/null
       kill "$old_pid" 2>/dev/null
-      rm "$pid_file"
+      cleanup_pid
     fi
 
     printf "$$" > "$pid_file"
 }
-
 get_full_path() {
     # Go to the relative PATH.
     if ! cd "${1%/*}"; then
@@ -457,6 +459,7 @@ main () {
     # Execute custom script.
     [[ "${external_script[0]}" ]] && bash -c "${external_script[@]}"
 
+    cleanup_pid
 
 }
 
