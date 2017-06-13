@@ -333,14 +333,13 @@ cleanup_pid () {
 }
 
 kill_old_log_new () {
-    # Kill old 'wal' instances.
+    # Kill old 'wal' instances found at $pid_file.
     if [ -e "$pid_file" ]; then
       old_pid="$(< "${pid_file}")"
       pkill -TERM -P "$old_pid" 2>/dev/null
       kill "$old_pid" 2>/dev/null
-      cleanup_pid
     fi
-
+    # Log our pid into the file
     printf "$$" > "$pid_file"
 }
 get_full_path() {
