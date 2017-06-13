@@ -294,7 +294,7 @@ export_putty() {
     printf "%s\n\n" "Windows Registry Editor Version 5.00"
     printf "%s\n" "[HKEY_CURRENT_USER\\Software\\SimonTatham\\PuTTY\\Sessions\\Wal]"
     printf "%s" "$putty_colors"
-		out "export: Exported putty colors"
+    out "export: Exported putty colors"
 }
 
 export_colors() {
