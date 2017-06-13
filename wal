@@ -342,7 +342,7 @@ kill_old_log_new () {
       kill "$old_pid" 2>/dev/null
     fi
     # Log our pid into the file
-    printf "$$" > "$pid_file"
+    printf "%s" "$$" > "$pid_file"
 }
 get_full_path() {
     # Go to the relative PATH.
