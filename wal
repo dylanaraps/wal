@@ -109,7 +109,7 @@ set_color() {
     scss_colors+="\$color${1}: ${2};${newline}"
     firefox_colors+="  --color${1}: ${2};${newline}"
     plain+="${2}${newline}"
-    putty_colors+="\"Colour${1}\"=\"$(convert_to_rgb ${2})\"${newline}"
+    putty_colors+="\"Colour${1}\"=\"$(convert_to_rgb "${2}")\"${newline}"
 }
 
 set_special() {
@@ -338,13 +338,13 @@ reload_xrdb() {
 # OTHER
 
 convert_to_rgb() {
-    r=`echo $1 | cut -c2-3`
-    g=`echo $1 | cut -c4-5`
-    b=`echo $1 | cut -c6-7`
+    r=$(echo "$1" | cut -c2-3)
+    g=$(echo "$1" | cut -c4-5)
+    b=$(echo "$1" | cut -c6-7)
 
-    r=`echo "ibase=16; $r" | bc`
-    g=`echo "ibase=16; $g" | bc`
-    b=`echo "ibase=16; $b" | bc`
+    r=$(echo "ibase=16; $r" | bc)
+    g=$(echo "ibase=16; $g" | bc)
+    b=$(echo "ibase=16; $b" | bc)
     echo "$r,$g,$b"
 }
 
