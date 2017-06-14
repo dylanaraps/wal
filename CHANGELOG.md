@@ -1,3 +1,7 @@
+## 14 June
+
+-  Added pid file in place of ps aux. @CallMeJuf 
+
 ## 29 May
 
 - Emacs: Add support for setting Emacs fg and bg @ben01189998819991197253
