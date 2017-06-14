@@ -345,6 +345,10 @@ convert_to_rgb() {
     printf "%s" "${red},${green},${blue}"
 }
 
+cleanup_pid () {
+    rm "$pid_file"
+}
+
 kill_old() {
     # Kill old 'wal' instances.
     pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
