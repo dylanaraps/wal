@@ -1,8 +1,8 @@
 ## 14 June
 
-- Added pid file in place of ps aux. @CallMeJuf 
-- kill_old() no longer kills parent processes. @CallMeJuf
-- Fixed typo which made the @import unusable. @TRSGuy 
+- Added pid file in place of `ps aux`. @CallMeJuf 
+- `kill_old()` no longer kills parent processes. @CallMeJuf
+- Fixed typo which made the `@import` unusable. @TRSGuy 
 
 ## 29 May
 
