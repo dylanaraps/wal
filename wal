@@ -99,7 +99,7 @@ get_colors() {
 }
 
 
-# SETi COLORSCHEME
+# SET COLORSCHEME
 
 
 set_color() {
