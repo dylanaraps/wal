@@ -99,7 +99,7 @@ get_colors() {
 }
 
 
-# SET COLORSCHEME
+# SETi COLORSCHEME
 
 
 set_color() {
@@ -338,14 +338,11 @@ reload_xrdb() {
 # OTHER
 
 convert_to_rgb() {
-    r=$(echo "$1" | cut -c2-3)
-    g=$(echo "$1" | cut -c4-5)
-    b=$(echo "$1" | cut -c6-7)
+    red="$((16#${1:1:2}))"
+    green="$((16#${1:3:2}))"
+    blue="$((16#${1:5:2}))"
 
-    r=$(echo "ibase=16; $r" | bc)
-    g=$(echo "ibase=16; $g" | bc)
-    b=$(echo "ibase=16; $b" | bc)
-    echo "$r,$g,$b"
+    printf "%s" "${red},${green},${blue}"
 }
 
 kill_old() {
