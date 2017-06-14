@@ -349,10 +349,6 @@ cleanup_pid () {
     rm "$pid_file"
 }
 
-kill_old() {
-    # Kill old 'wal' instances.
-    pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
-
 kill_old_wal () {
     # Create Cache Dir
     mkdir -p "${cache_dir}/"
