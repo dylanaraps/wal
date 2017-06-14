@@ -1,3 +1,9 @@
+## 14 June
+
+- Added pid file in place of `ps aux`. @CallMeJuf 
+- `kill_old()` no longer kills parent processes. @CallMeJuf
+- Fixed typo which made the `@import` unusable. @TRSGuy 
+
 ## 29 May
 
 - Emacs: Add support for setting Emacs fg and bg @ben01189998819991197253

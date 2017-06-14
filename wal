@@ -13,6 +13,7 @@ shopt -s nullglob nocasematch
 
 # Internal variables.
 cache_dir="${HOME}/.cache/wal"
+pid_file="${cache_dir}/wal.pid"
 newline=$'\n'
 color_count=16
 os="$(uname)"
@@ -56,7 +57,7 @@ get_colors() {
             exit 1
         fi
 
-        # Create the cache dir.
+        # Create colorscheme dir.
         mkdir -p "${cache_dir}/schemes"
 
         # Get the current wallpaper.
@@ -313,7 +314,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${HOME}/.cache/wal/sequences")"
+    sequences="$(< "${cache_dir}/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
@@ -334,7 +335,6 @@ reload_xrdb() {
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
 }
-
 # OTHER
 
 convert_to_rgb() {
@@ -353,12 +353,19 @@ kill_old() {
     # Kill old 'wal' instances.
     pids=($(ps aux | awk '(!/ awk/) && /wal / {print $2}'))
 
-    for pid in "${pids[@]}"; do
-        if [[ "$pid" != "$$" && "$pid" != "$PPID" ]]; then
-            pkill -TERM -P "$pid" 2>/dev/null
-            kill "$pid" 2>/dev/null
-        fi
-    done
+kill_old_wal () {
+    # Create Cache Dir
+    mkdir -p "${cache_dir}/"
+    
+    # Kill old 'wal' instances found at $pid_file.
+    if [[ -f "$pid_file" ]]; then
+      old_pid="$(< "${pid_file}")"
+      pkill -TERM -P "$old_pid" 2>/dev/null
+      kill "$old_pid" 2>/dev/null
+    fi
+    
+    # Log our pid into the file
+    printf "%s" "$$" > "$pid_file"
 }
 
 get_full_path() {
@@ -462,7 +469,7 @@ get_args() {
 
 main () {
     get_args "$@"
-    kill_old
+    kill_old_wal
 
     get_colors
     send_sequences
@@ -476,6 +483,9 @@ main () {
 
     # Execute custom script.
     [[ "${external_script[0]}" ]] && bash -c "${external_script[@]}"
+
+    cleanup_pid
+
 }
 
 main "$@"
