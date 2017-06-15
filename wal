@@ -109,8 +109,8 @@ set_color() {
     sh_colors+="color${1}='${2}'${newline}"
     scss_colors+="\$color${1}: ${2};${newline}"
     firefox_colors+="  --color${1}: ${2};${newline}"
-    plain+="${2}${newline}"
     putty_colors+="\"Colour${1}\"=\"$(convert_to_rgb "${2}")\"${newline}"
+    plain+="${2}${newline}"
 }
 
 set_special() {
@@ -306,7 +306,7 @@ export_colors() {
     export_rofi
     export_emacs
     export_plain     > "${cache_dir}/colors"
-    export_putty     > "${cache_dir}/wal.reg"
+    export_putty     > "${cache_dir}/colors.reg"
 }
 
 
@@ -352,14 +352,14 @@ cleanup_pid () {
 kill_old_wal () {
     # Create Cache Dir
     mkdir -p "${cache_dir}/"
-    
+
     # Kill old 'wal' instances found at $pid_file.
     if [[ -f "$pid_file" ]]; then
       old_pid="$(< "${pid_file}")"
       pkill -TERM -P "$old_pid" 2>/dev/null
       kill "$old_pid" 2>/dev/null
     fi
-    
+
     # Log our pid into the file
     printf "%s" "$$" > "$pid_file"
 }
