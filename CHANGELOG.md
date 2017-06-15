@@ -1,8 +1,12 @@
+## 15 June
+
+- Added ability to export to .reg file for use with PuTTY. @rugglcon
+
 ## 14 June
 
-- Added pid file in place of `ps aux`. @CallMeJuf 
+- Added pid file in place of `ps aux`. @CallMeJuf
 - `kill_old()` no longer kills parent processes. @CallMeJuf
-- Fixed typo which made the `@import` unusable. @TRSGuy 
+- Fixed typo which made the `@import` unusable. @TRSGuy
 
 ## 29 May
 
