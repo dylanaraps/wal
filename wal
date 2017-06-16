@@ -302,7 +302,7 @@ reload_env() {
     pgrep i3 && i3-msg reload &
 
     # Generate GTK Scheme.
-    if exists oomox-cli; then
+    if type -p oomox-cli >/dev/null 2>&1; then
         oomox-cli -o wal "${cache_dir}/wal-oomox"
         reload_gtk
     fi
@@ -334,10 +334,6 @@ END
 
 # OTHER
 
-
-exists() {
-    type -p "$1" >/dev/null 2>&1
-}
 
 get_full_path() {
     # Go to the relative PATH.
