@@ -105,11 +105,15 @@ get_colors() {
 
 set_color() {
     sequences+="\033]4;${1};${2}\007"
-    x_colors+="*color${1}: ${2}${newline}"
     sh_colors+="color${1}='${2}'${newline}"
     scss_colors+="\$color${1}: ${2};${newline}"
     firefox_colors+="  --color${1}: ${2};${newline}"
     putty_colors+="\"Colour${1}\"=\"$(convert_to_rgb "${2}")\"${newline}"
+
+    # Set *.color and *color to fix issues with Polybar.
+    x_colors+="*color${1}: ${2}${newline}"
+    x_colors+="*.color${1}: ${2}${newline}"
+
     plain+="${2}${newline}"
 }
 
