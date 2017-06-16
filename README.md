@@ -24,6 +24,8 @@
     * [Applying the theme to new terminals.](#applying-the-theme-to-new-terminals)
     * [Making the colorscheme persist on reboot.](#making-the-colorscheme-persist-on-reboot)
 * [Usage](#usage)
+* [Plugins](#plugins)
+    * [Hyper Terminal](#hyper-terminal)
 * [Customization](#customization)
     * [i3](#i3)
     * [rofi](#rofi)
@@ -35,6 +37,7 @@
     * [SCSS variables](#scss-variables)
     * [Firefox variables](#firefox-variables)
     * [Scripting](#scripting)
+    * [Custom Switcher](#custom-switcher)
 
 <!-- vim-markdown-toc -->
 
@@ -132,6 +135,16 @@ Flags:
   -x                      Use extended 16-color palette.
 
 ```
+
+
+## Plugins
+
+Listed below are plugins for other programs that add support for `wal` colors.
+
+### Hyper Terminal
+
+https://github.com/dneustadt/hyper-wal
+
 
 
 ## Customization
