@@ -34,6 +34,7 @@
     * [Shell Variables](#shell-variables)
     * [SCSS variables](#scss-variables)
     * [Firefox variables](#firefox-variables)
+    * [PuTTY](#putty)
     * [Scripting](#scripting)
 
 <!-- vim-markdown-toc -->
@@ -306,6 +307,10 @@ Example Firefox CSS:
 }
 
 ```
+
+### PuTTY
+
+`wal` also exports the colors so they can be used with PuTTY. After running `wal`, a file will be created (`$HOME/.cache/wal/colors.reg`) that can be executed on a Windows machine to create a new PuTTY session with the generated colors. Once the file is executed, you can select `Wal` from the *Saved Sessions* list.
 
 
 ### Scripting
