@@ -1,3 +1,34 @@
+## 15 June
+
+- Added ability to export to .reg file for use with PuTTY. @rugglcon
+
+## 14 June
+
+- Added pid file in place of `ps aux`. @CallMeJuf
+- `kill_old()` no longer kills parent processes. @CallMeJuf
+- Fixed typo which made the `@import` unusable. @TRSGuy
+
+## 29 May
+
+- Emacs: Add support for setting Emacs fg and bg @ben01189998819991197253
+
+## 20 May
+
+- Added `-x` to use extended 16-color palette. @mreinhardt
+
+## 17 May
+
+- Added `-f` to load `colors` files directly without using or changing the background image. @mreinhardt
+
+## 8 May
+
+- [vim] Added support for Airline and Limelight.
+
+## 24 April
+
+- Fixed `wal` causing `gitk` to crash on startup.
+- Fixed counter error in `wal2iterm` `div` recursive call. @lpon
+
 ## 11 April
 
 - Fixed wallpaper not being set correctly on XFCE.

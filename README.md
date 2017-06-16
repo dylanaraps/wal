@@ -24,16 +24,21 @@
     * [Applying the theme to new terminals.](#applying-the-theme-to-new-terminals)
     * [Making the colorscheme persist on reboot.](#making-the-colorscheme-persist-on-reboot)
 * [Usage](#usage)
+* [Plugins](#plugins)
+    * [Hyper Terminal](#hyper-terminal)
 * [Customization](#customization)
     * [i3](#i3)
     * [rofi](#rofi)
     * [vim](#vim)
+    * [Emacs](#emacs)
     * [polybar](#polybar)
     * [iTerm2](#iterm2)
     * [Shell Variables](#shell-variables)
     * [SCSS variables](#scss-variables)
     * [Firefox variables](#firefox-variables)
+    * [PuTTY](#putty)
     * [Scripting](#scripting)
+    * [Custom Switcher](#custom-switcher)
 
 <!-- vim-markdown-toc -->
 
@@ -119,6 +124,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -f '/path/to/colors'    Load colors directly from a colorscheme file.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
@@ -127,8 +133,19 @@ Flags:
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
+  -x                      Use extended 16-color palette.
 
 ```
+
+
+## Plugins
+
+Listed below are plugins for other programs that add support for `wal` colors.
+
+### Hyper Terminal
+
+https://github.com/dneustadt/hyper-wal
+
 
 
 ## Customization
@@ -211,6 +228,10 @@ Plug 'dylanaraps/wal'
 colorscheme wal
 ```
 
+### Emacs
+
+Install [this package](https://github.com/cqql/xresources-theme), which will make Emacs use your X environment's colors instead of its default colors.
+
 ### polybar
 
 Polybar can read colors from `Xresources` to set the bar's colors.
@@ -290,7 +311,7 @@ Example Firefox CSS:
 ```css
 /* Import the CSS file.
    NOTE: This must be at line 1 of your Firefox stylesheet. */
-@import "file:///home/dylan/.cache/wal/firefox.css";
+@import url('file:///home/dylan/.cache/wal/firefox.css')
 
 /* Use the variables */
 #nav-bar {
@@ -299,6 +320,10 @@ Example Firefox CSS:
 }
 
 ```
+
+### PuTTY
+
+`wal` also exports the colors so they can be used with PuTTY. After running `wal`, a file will be created (`$HOME/.cache/wal/colors.reg`) that can be executed on a Windows machine to create a new PuTTY session with the generated colors. Once the file is executed, you can select `Wal` from the *Saved Sessions* list.
 
 
 ### Scripting
@@ -336,4 +361,17 @@ c=($(< "${cache_dir}/colors"))
 
 # Remove the leading '#' if needed.
 c=("${c[@]//\#}")
+```
+
+
+### Custom Switcher
+
+You can also manually create your own `colors` files and load them directly with the `wal -f` option to quickly switch between your favorite colorschemes without changing the background.
+
+```sh
+# Switch to previously saved Monokai colorscheme
+wal -f "$HOME/.colors/monokai"
+
+# Switch to previously saved Solarized colorscheme
+wal -f "$HOME/.colors/solarized"
 ```

@@ -15,7 +15,7 @@ let g:colors_name = 'wal'
 
 " highlight groups {{{
 
-set t_Co=16
+" set t_Co=16
 hi Normal ctermbg=NONE ctermfg=7 cterm=NONE
 hi NonText ctermbg=NONE ctermfg=0 cterm=NONE
 hi Comment ctermbg=NONE ctermfg=8 cterm=NONE
@@ -28,7 +28,7 @@ hi Special ctermbg=NONE ctermfg=6 cterm=NONE
 hi Statement ctermbg=NONE ctermfg=1 cterm=NONE
 hi String ctermbg=NONE ctermfg=2 cterm=NONE
 hi Number ctermbg=NONE ctermfg=3 cterm=NONE
-hi Todo ctermbg=8 ctermfg=3 cterm=NONE
+hi Todo ctermbg=2 ctermfg=0 cterm=NONE
 hi Type ctermbg=NONE ctermfg=3 cterm=NONE
 hi Underlined ctermbg=NONE ctermfg=1 cterm=underline
 hi StatusLine ctermbg=7 ctermfg=0 cterm=NONE
@@ -73,7 +73,7 @@ hi Cursor ctermbg=NONE ctermfg=8 cterm=NONE
 hi Structure ctermbg=NONE ctermfg=5 cterm=NONE
 hi CursorColumn ctermbg=8 ctermfg=7 cterm=NONE
 hi ModeMsg ctermbg=NONE ctermfg=7 cterm=NONE
-hi SpellBad ctermbg=1 ctermfg=7 cterm=underline
+hi SpellBad ctermbg=1 ctermfg=0 cterm=NONE
 hi SpellCap ctermbg=NONE ctermfg=4 cterm=underline
 hi SpellLocal ctermbg=NONE ctermfg=5 cterm=underline
 hi SpellRare ctermbg=NONE ctermfg=6 cterm=underline
@@ -108,7 +108,7 @@ hi htmlItalic ctermbg=NONE ctermfg=5 cterm=NONE
 hi htmlEndTag ctermbg=NONE ctermfg=7 cterm=NONE
 hi htmlTag ctermbg=NONE ctermfg=7 cterm=NONE
 hi htmlTagName ctermbg=NONE ctermfg=1 cterm=BOLD
-hi htmlH1 ctermbg=NONE ctermfg=7 cterm=BOLD
+hi htmlH1 ctermbg=NONE ctermfg=7 cterm=NONE
     hi link htmlH2 htmlH1
     hi link htmlH3 htmlH1
     hi link htmlH4 htmlH1
@@ -137,6 +137,12 @@ hi sassMixinName ctermbg=NONE ctermfg=4 cterm=NONE
 hi javaScript ctermbg=NONE ctermfg=7 cterm=NONE
 hi javaScriptBraces ctermbg=NONE ctermfg=7 cterm=NONE
 hi javaScriptNumber ctermbg=NONE ctermfg=5 cterm=NONE
+hi markdownH1 ctermbg=NONE ctermfg=7 cterm=NONE
+    hi link markdownH2 markdownH1
+    hi link markdownH3 markdownH1
+    hi link markdownH4 markdownH1
+    hi link markdownH5 markdownH1
+    hi link markdownH6 markdownH1
 hi markdownAutomaticLink ctermbg=NONE ctermfg=1 cterm=underline
     hi link markdownUrl markdownAutomaticLink
 hi markdownError ctermbg=NONE ctermfg=7 cterm=NONE
@@ -177,5 +183,11 @@ hi ALEErrorSign ctermbg=NONE ctermfg=1 cterm=NONE
 hi ALEWarningSign ctermbg=NONE ctermfg=3 cterm=NONE
 hi ALEError ctermbg=NONE ctermfg=1 cterm=NONE
 hi ALEWarning ctermbg=NONE ctermfg=3 cterm=NONE
+
+" }}}
+
+" Plugin options {{{
+
+let g:limelight_conceal_ctermfg = 8
 
 " }}}

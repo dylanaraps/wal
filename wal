@@ -13,6 +13,7 @@ shopt -s nullglob nocasematch
 
 # Internal variables.
 cache_dir="${HOME}/.cache/wal"
+pid_file="${cache_dir}/wal.pid"
 newline=$'\n'
 color_count=16
 os="$(uname)"
@@ -48,30 +49,33 @@ rand_img() {
 }
 
 get_colors() {
-    # Check for imagemagick.
-    if ! type -p convert >/dev/null 2>&1; then
-        out "error: imagemagick not found, exiting..."
-        out "error: wal requires imagemagick to function."
-        exit 1
+    # Only run if -i used, skip for -f since $wal not set and $cache_file already set.
+    if [[ -n "$wal" ]]; then
+        # Check for imagemagick.
+        if ! type -p convert >/dev/null 2>&1; then
+            out "error: imagemagick not found, exiting..."
+            out "error: wal requires imagemagick to function."
+            exit 1
+        fi
+
+        # Create colorscheme dir.
+        mkdir -p "${cache_dir}/schemes"
+
+        # Get the current wallpaper.
+        [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
+
+        # Shuffle the image.
+        [[ -d "$wal" ]] && rand_img
+
+        # If the wallpaper doesn't exist, use the current one.
+        [[ ! -f "$wal" ]] && wal="$old_wall"
+
+        # Store cached colorscheme as 'dir-to-img.jpg'
+        cache_file="${cache_dir}/schemes/${wal//\//_}"
+
+        # Cache the wallpaper name
+        printf "%s\n" "$wal" > "${cache_dir}/wal"
     fi
-
-    # Create the cache dir.
-    mkdir -p "${cache_dir}/schemes"
-
-    # Get the current wallpaper.
-    [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
-
-    # Shuffle the image.
-    [[ -d "$wal" ]] && rand_img
-
-    # If the wallpaper doesn't exist, use the current one.
-    [[ ! -f "$wal" ]] && wal="$old_wall"
-
-    # Store cached colorscheme as 'dir-to-img.jpg'
-    cache_file="${cache_dir}/schemes/${wal//\//_}"
-
-    # Cache the wallpaper name
-    printf "%s\n" "$wal" > "${cache_dir}/wal"
 
     # Generate 16 colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
@@ -84,6 +88,9 @@ get_colors() {
             colors=($(convert "${wal}"  +dither -colors "$((color_count + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
             ((index++))
             out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($((color_count + index)))."
+
+            # Quit the loop if we're taking too long.
+            ((index == 10)) && break
         done
 
         # Cache the scheme.
@@ -99,10 +106,15 @@ get_colors() {
 
 set_color() {
     sequences+="\033]4;${1};${2}\007"
-    x_colors+="*color${1}: ${2}${newline}"
     sh_colors+="color${1}='${2}'${newline}"
     scss_colors+="\$color${1}: ${2};${newline}"
     firefox_colors+="  --color${1}: ${2};${newline}"
+    putty_colors+="\"Colour${1}\"=\"$(convert_to_rgb "${2}")\"${newline}"
+
+    # Set *.color and *color to fix issues with Polybar.
+    x_colors+="*color${1}: ${2}${newline}"
+    x_colors+="*.color${1}: ${2}${newline}"
+
     plain+="${2}${newline}"
 }
 
@@ -111,9 +123,20 @@ set_special() {
 
     # Set X colors
     case "$1" in
-        10) x_colors+="*foreground: ${2}${newline}" ;;
-        11) x_colors+="*background: ${2}${newline}" ;;
-        12) x_colors+="*cursor: ${2}${newline}" ;;
+        10)
+            x_colors+="URxvt*foreground: ${2}${newline}"
+            x_colors+="XTerm*foreground: ${2}${newline}"
+        ;;
+
+        11)
+            x_colors+="URxvt*background: ${2}${newline}"
+            x_colors+="XTerm*background: ${colors[0]}${newline}"
+        ;;
+
+        12)
+            x_colors+="URxvt*cursorColor: ${2}${newline}"
+            x_colors+="XTerm*cursorColor: ${colors[0]}${newline}"
+        ;;
     esac
 }
 
@@ -129,23 +152,36 @@ send_sequences() {
     [[ "$vte" != "on" ]] && set_special 708 "${alpha:+[${alpha}]}${colors[0]}"
 
     set_color 0  "${colors[0]}"
-    set_color 1  "${colors[9]}"
-    set_color 2  "${colors[10]}"
-    set_color 3  "${colors[11]}"
-    set_color 4  "${colors[12]}"
-    set_color 5  "${colors[13]}"
-    set_color 6  "${colors[14]}"
-    set_color 7  "${colors[15]}"
 
-    # Create a comment color based on the brightness of the background.
-    case "${colors[0]:1:1}" in
-        [0-1]) set_color 8 "#666666" ;;
-        2)     set_color 8 "#757575" ;;
-        [3-4]) set_color 8 "#999999" ;;
-        5)     set_color 8 "#8a8a8a" ;;
-        [6-9]) set_color 8 "#a1a1a1" ;;
-        *)     set_color 8 "${colors[7]}" ;;
-    esac
+    # If $extended_colors isn't set, only use the bright colors.
+    if [[ -z "$extended_colors" ]]; then
+        set_color 1  "${colors[9]}"
+        set_color 2  "${colors[10]}"
+        set_color 3  "${colors[11]}"
+        set_color 4  "${colors[12]}"
+        set_color 5  "${colors[13]}"
+        set_color 6  "${colors[14]}"
+        set_color 7  "${colors[15]}"
+
+        # Create a comment color based on the brightness of the background.
+        case "${colors[0]:1:1}" in
+            [0-1]) set_color 8 "#666666" ;;
+            2)     set_color 8 "#757575" ;;
+            [3-4]) set_color 8 "#999999" ;;
+            5)     set_color 8 "#8a8a8a" ;;
+            [6-9]) set_color 8 "#a1a1a1" ;;
+            *)     set_color 8 "${colors[7]}" ;;
+        esac
+    else  # $extended_colors="on"
+        set_color 1  "${colors[1]}"
+        set_color 2  "${colors[2]}"
+        set_color 3  "${colors[3]}"
+        set_color 4  "${colors[4]}"
+        set_color 5  "${colors[5]}"
+        set_color 6  "${colors[6]}"
+        set_color 7  "${colors[7]}"
+        set_color 8  "${colors[8]}"
+    fi
 
     set_color 9  "${colors[9]}"
     set_color 10 "${colors[10]}"
@@ -155,10 +191,14 @@ send_sequences() {
     set_color 14 "${colors[14]}"
     set_color 15 "${colors[15]}"
 
+    # Set a black color that isn't affected by bold highlighting.
+    sequences+="\033]4;66;${colors[0]}\007"
+    x_colors+="*color66: ${colors[0]}${newline}"
+
     # Directing output to /dev/pts/* allows you to send output to all open terminals
     # on your system.
     for term in /dev/pts/[0-9]*; do
-        printf "%b" "$sequences" > "$term" &
+        [[ -w "$term" ]] && printf "%b" "$sequences" > "$term" &
     done
 
     out "colors: Set terminal colors"
@@ -267,9 +307,21 @@ export_oomox() {
     out "export: Exported Oomox colors"
 }
 
+export_emacs() {
+    x_colors+="emacs*background: ${colors[0]}${newline}"
+    x_colors+="emacs*foreground: ${colors[15]}${newline}"
+}
+
 export_plain() {
     printf "%s" "$plain"
     out "export: Exported plain colors"
+}
+
+export_putty() {
+    printf "%s\n\n" "Windows Registry Editor Version 5.00"
+    printf "%s\n" "[HKEY_CURRENT_USER\\Software\\SimonTatham\\PuTTY\\Sessions\\Wal]"
+    printf "%s" "$putty_colors"
+    out "export: Exported putty colors"
 }
 
 export_colors() {
@@ -279,7 +331,9 @@ export_colors() {
     export_firefox   > "${cache_dir}/firefox.css"
     export_oomox     > "${cache_dir}/wal-oomox"
     export_rofi
+    export_emacs
     export_plain     > "${cache_dir}/colors"
+    export_putty     > "${cache_dir}/colors.reg"
 }
 
 
@@ -288,7 +342,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${HOME}/.cache/wal/sequences")"
+    sequences="$(< "${cache_dir}/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
@@ -335,6 +389,33 @@ END
 # OTHER
 
 
+convert_to_rgb() {
+    red="$((16#${1:1:2}))"
+    green="$((16#${1:3:2}))"
+    blue="$((16#${1:5:2}))"
+
+    printf "%s" "${red},${green},${blue}"
+}
+
+cleanup_pid () {
+    rm "$pid_file"
+}
+
+kill_old_wal () {
+    # Create Cache Dir
+    mkdir -p "${cache_dir}/"
+
+    # Kill old 'wal' instances found at $pid_file.
+    if [[ -f "$pid_file" ]]; then
+      old_pid="$(< "${pid_file}")"
+      pkill -TERM -P "$old_pid" 2>/dev/null
+      kill "$old_pid" 2>/dev/null
+    fi
+
+    # Log our pid into the file
+    printf "%s" "$$" > "$pid_file"
+}
+
 get_full_path() {
     # Go to the relative PATH.
     if ! cd "${1%/*}"; then
@@ -369,6 +450,7 @@ Example: wal -i '${HOME}/Pictures/Wallpapers/'
 Flags:
   -a                      Set terminal background transparency. *Only works in URxvt*
   -c                      Delete all cached colorschemes.
+  -f '/path/to/colors'    Load colors directly from a colorscheme file.
   -h                      Display this help page.
   -i '/path/to/dir'       Which image to use.
      '/path/to/img.jpg'
@@ -377,15 +459,21 @@ Flags:
   -q                      Quiet mode, don't print anything.
   -r                      Reload current colorscheme.
   -t                      Fix artifacts in VTE Terminals. (Termite, xfce4-terminal)
+  -x                      Use extended 16-color palette.
 
 "
 }
 
 get_args() {
-    while getopts ":a:chi:no:qrt" opt; do
+    while getopts ":a:cf:hi:no:qrtx" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
             "c") rm -rf "${cache_dir}/schemes"; exit ;;
+            "f")
+                [[ -f "$OPTARG" ]] && cache_file="$OPTARG"
+                [[ -z "$cache_file" ]] && cache_file="$(get_full_path "$OPTARG")"
+                nowall="on"
+            ;;
             "h") usage; exit 1 ;;
 
             "i")
@@ -398,6 +486,7 @@ get_args() {
             "q") quiet="on" ;;
             "r") reload="on" ;;
             "t") vte="on" ;;
+            "x") extended_colors="on" ;;
 
             "?")
                 printf "%s\n" "Invalid option: -$OPTARG" >&2
@@ -415,8 +504,8 @@ get_args() {
     [[ "$reload" == "on" ]] && reload_colors
 
     # Check if -i was used.
-    if [[ -z "$wal" ]]; then
-        printf "%s\n" "Error: 'wal' must be run with '-i'" >&2
+    if [[ -z "$wal" && -z "$cache_file" || -n "$wal" && -n "$cache_file" ]]; then
+        printf "%s\n" "Error: 'wal' must be run with either '-i' or '-f'" >&2
         printf "%s\n" "Try 'wal -h' for more information." >&2
         exit 1
     fi
@@ -428,6 +517,7 @@ get_args() {
 
 main () {
     get_args "$@"
+    kill_old_wal
 
     get_colors
     send_sequences
@@ -441,6 +531,9 @@ main () {
 
     # Execute custom script.
     [[ "${external_script[0]}" ]] && bash -c "${external_script[@]}"
+
+    cleanup_pid
+
 }
 
 main "$@"
