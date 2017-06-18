@@ -18,6 +18,7 @@ newline=$'\n'
 color_count=16
 os="$(uname)"
 
+
 # GENERATE COLORSCHEME
 
 
@@ -285,6 +286,27 @@ export_rofi() {
     x_colors+="rofi.color-urgent: ${rofi_bg}, ${colors[9]}, ${colors[0]}, ${colors[9]}, ${colors[15]}${newline}"
 }
 
+export_oomox() {
+    printf "%s\n" "NAME=wal"
+    printf "%s\n" "BG=${colors[0]/\#}"
+    printf "%s\n" "FG=${colors[15]/\#}"
+    printf "%s\n" "MENU_BG=${colors[0]/\#}"
+    printf "%s\n" "MENU_FG=${colors[15]/\#}"
+    printf "%s\n" "SEL_BG=${colors[3]/\#}"
+    printf "%s\n" "SEL_FG=${colors[15]/\#}"
+    printf "%s\n" "TXT_BG=${colors[0]/\#}"
+    printf "%s\n" "TXT_FG=${colors[15]/\#}"
+    printf "%s\n" "BTN_BG=${colors[1]/\#}"
+    printf "%s\n" "BTN_FG=${colors[15]/\#}"
+    printf "%s\n" "HDR_BTN_BG=${colors[1]/\#}"
+    printf "%s\n" "HDR_BTN_FG=${colors[15]/\#}"
+    printf "%s\n" "GTK3_GENERATE_DARK=False"
+    printf "%s\n" "ROUNDNESS=0"
+    printf "%s\n" "SPACING=3"
+    printf "%s\n" "GRADIENT=0.0"
+    out "export: Exported Oomox colors"
+}
+
 export_emacs() {
     x_colors+="emacs*background: ${colors[0]}${newline}"
     x_colors+="emacs*foreground: ${colors[15]}${newline}"
@@ -312,6 +334,7 @@ export_colors() {
     export_envar     > "${cache_dir}/colors.sh"
     export_scss      > "${cache_dir}/colors.scss"
     export_firefox   > "${cache_dir}/firefox.css"
+    export_oomox     > "${cache_dir}/wal-oomox"
     export_rofi
     export_emacs
     export_plain     > "${cache_dir}/colors"
@@ -321,6 +344,7 @@ export_colors() {
 
 
 # RELOAD COLORSCHEME
+
 
 reload_colors() {
     # Source the current sequences
@@ -336,6 +360,12 @@ reload_colors() {
 reload_env() {
     # Reload i3 if running.
     pgrep i3 && i3-msg reload &
+
+    # Generate GTK Scheme.
+    if type -p oomox-cli >/dev/null 2>&1; then
+        oomox-cli -o wal "${cache_dir}/wal-oomox"
+        reload_gtk
+    fi
 }
 
 reload_xrdb() {
@@ -345,7 +375,25 @@ reload_xrdb() {
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
 }
+
+reload_gtk(){
+type -p python2 >/dev/null 2>&1 || return
+
+python2 - <<END
+import sys, gtk
+
+events=gtk.gdk.Event(gtk.gdk.CLIENT_EVENT)
+data=gtk.gdk.atom_intern("_GTK_READ_RCFILES", False)
+events.data_format=8
+events.send_event=True
+events.message_type=data
+events.send_clientmessage_toall()
+END
+}
+
+
 # OTHER
+
 
 convert_to_rgb() {
     red="$((16#${1:1:2}))"
@@ -482,7 +530,7 @@ main () {
     set_wallpaper
     export_colors
     reload_xrdb
-    reload_env >/dev/null 2>&1
+    reload_env >/dev/null 2>&1 &
 
     # Set the locale back to the original value.
     export LC_ALL="$sys_locale"
