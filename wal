@@ -302,6 +302,11 @@ export_putty() {
     out "export: Exported putty colors"
 }
 
+export_xrdb() {
+    printf "%s" "$x_colors"
+    out "export: Exported xrdb colors"
+}
+
 export_colors() {
     export_sequences > "${cache_dir}/sequences"
     export_envar     > "${cache_dir}/colors.sh"
@@ -310,6 +315,7 @@ export_colors() {
     export_rofi
     export_emacs
     export_plain     > "${cache_dir}/colors"
+    export_xrdb      > "${cache_dir}/colors.xresources"
     export_putty     > "${cache_dir}/colors.reg"
 }
 
