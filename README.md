@@ -39,6 +39,7 @@
     * [PuTTY](#putty)
     * [Scripting](#scripting)
     * [Custom Switcher](#custom-switcher)
+    * [Terminal.sexy](#terminalsexy)
 
 <!-- vim-markdown-toc -->
 
@@ -370,8 +371,13 @@ You can also manually create your own `colors` files and load them directly with
 
 ```sh
 # Switch to previously saved Monokai colorscheme
+
 wal -f "$HOME/.colors/monokai"
 
 # Switch to previously saved Solarized colorscheme
 wal -f "$HOME/.colors/solarized"
 ```
+
+### Terminal.sexy
+
+You can import `wal`'s colors into Terminal.sexy by copy-pasting the contents of the `colors.xresources` file located in the cache directory.
