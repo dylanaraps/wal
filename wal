@@ -322,6 +322,7 @@ export_colors() {
 
 # RELOAD COLORSCHEME
 
+
 reload_colors() {
     # Source the current sequences
     sequences="$(< "${cache_dir}/sequences")"
@@ -345,7 +346,10 @@ reload_xrdb() {
     xrdb -merge >/dev/null 2>&1 <<< "$x_colors" && \
         out "colors: Merged colors with X env"
 }
+
+
 # OTHER
+
 
 convert_to_rgb() {
     red="$((16#${1:1:2}))"

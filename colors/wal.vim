@@ -39,7 +39,7 @@ hi TabLineSel ctermbg=4 ctermfg=0 cterm=NONE
 hi TermCursorNC ctermbg=3 ctermfg=0 cterm=NONE
 hi VertSplit ctermbg=NONE ctermfg=NONE cterm=NONE
 hi Title ctermbg=NONE ctermfg=4 cterm=NONE
-hi CursorLine ctermbg=NONE ctermfg=8 cterm=NONE
+hi CursorLine ctermbg=8 ctermfg=0 cterm=NONE
 hi LineNr ctermbg=NONE ctermfg=8 cterm=NONE
 hi CursorLineNr ctermbg=NONE ctermfg=8 cterm=NONE
 hi helpLeadBlank ctermbg=NONE ctermfg=7 cterm=NONE
