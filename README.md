@@ -2,7 +2,9 @@
 
 `pywal` is a Python 3 version of `wal` written by me. It's faster, the code is cleaner, it actually has tests(!) and it supports more export formats. `pywal` can also be installed easily on any distro by using `pip install pywal`.
 
-**https://github.com/dylanaraps/pywal**
+For a list of differences between `pywal` and `wal`, take a look at this wiki page: **[What's different in pywal?](https://github.com/dylanaraps/pywal/wiki/What's-different-in-pywal%3F)**
+
+Repo link: **https://github.com/dylanaraps/pywal**
 
 
 # wal
