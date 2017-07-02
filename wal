@@ -15,7 +15,7 @@ shopt -s nullglob nocasematch
 WAL_CACHE_DIR="${WAL_CACHE_DIR:-${HOME}/.cache/wal}"
 pid_file="${WAL_CACHE_DIR}/wal.pid"
 newline=$'\n'
-color_count=16
+WAL_COLOR_COUNT="${WAL_COLOR_COUNT:-16}"
 os="$(uname)"
 
 # GENERATE COLORSCHEME
@@ -76,17 +76,17 @@ get_colors() {
         printf "%s\n" "$wal" > "${WAL_CACHE_DIR}/wal"
     fi
 
-    # Generate 16 colors from the image and save them to a file.
+    # Generate colors from the image and save them to a file.
     if [[ -f "$cache_file" ]]; then
         colors=($(< "$cache_file"))
     else
-        colors=($(convert "${wal}"  +dither -colors $color_count -unique-colors txt:- | grep -E -o " \#.{6}"))
+        colors=($(convert "${wal}"  +dither -colors "$WAL_COLOR_COUNT" -unique-colors txt:- | grep -E -o " \#.{6}"))
 
         # If imagemagick finds less than 16 colors, use a larger source number of colors.
         while (( "${#colors[@]}" <= 15 )); do
-            colors=($(convert "${wal}"  +dither -colors "$((color_count + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
+            colors=($(convert "${wal}"  +dither -colors "$((WAL_COLOR_COUNT + ${index:-2}))" -unique-colors txt:- | grep -E -o " \#.{6}"))
             ((index++))
-            out "colors: Imagemagick couldn't generate a $color_count color palette, trying a larger palette size ($((color_count + index)))."
+            out "colors: Imagemagick couldn't generate a $WAL_COLOR_COUNT color palette, trying a larger palette size ($((WAL_COLOR_COUNT + index)))."
 
             # Quit the loop if we're taking too long.
             ((index == 10)) && break
