@@ -12,8 +12,8 @@ export LANG=C
 shopt -s nullglob nocasematch
 
 # Internal variables.
-cache_dir="${HOME}/.cache/wal"
-pid_file="${cache_dir}/wal.pid"
+WAL_CACHE_DIR="${WAL_CACHE_DIR:-${HOME}/.cache/wal}"
+pid_file="${WAL_CACHE_DIR}/wal.pid"
 newline=$'\n'
 color_count=16
 os="$(uname)"
@@ -58,10 +58,10 @@ get_colors() {
         fi
 
         # Create colorscheme dir.
-        mkdir -p "${cache_dir}/schemes"
+        mkdir -p "${WAL_CACHE_DIR}/schemes"
 
         # Get the current wallpaper.
-        [[ -f "${cache_dir}/wal" ]] && old_wall="$(< "${cache_dir}/wal")"
+        [[ -f "${WAL_CACHE_DIR}/wal" ]] && old_wall="$(< "${WAL_CACHE_DIR}/wal")"
 
         # Shuffle the image.
         [[ -d "$wal" ]] && rand_img
@@ -70,10 +70,10 @@ get_colors() {
         [[ ! -f "$wal" ]] && wal="$old_wall"
 
         # Store cached colorscheme as 'dir-to-img.jpg'
-        cache_file="${cache_dir}/schemes/${wal//\//_}"
+        cache_file="${WAL_CACHE_DIR}/schemes/${wal//\//_}"
 
         # Cache the wallpaper name
-        printf "%s\n" "$wal" > "${cache_dir}/wal"
+        printf "%s\n" "$wal" > "${WAL_CACHE_DIR}/wal"
     fi
 
     # Generate 16 colors from the image and save them to a file.
@@ -308,15 +308,15 @@ export_xrdb() {
 }
 
 export_colors() {
-    export_sequences > "${cache_dir}/sequences"
-    export_envar     > "${cache_dir}/colors.sh"
-    export_scss      > "${cache_dir}/colors.scss"
-    export_firefox   > "${cache_dir}/firefox.css"
+    export_sequences > "${WAL_CACHE_DIR}/sequences"
+    export_envar     > "${WAL_CACHE_DIR}/colors.sh"
+    export_scss      > "${WAL_CACHE_DIR}/colors.scss"
+    export_firefox   > "${WAL_CACHE_DIR}/firefox.css"
     export_rofi
     export_emacs
-    export_plain     > "${cache_dir}/colors"
-    export_xrdb      > "${cache_dir}/colors.xresources"
-    export_putty     > "${cache_dir}/colors.reg"
+    export_plain     > "${WAL_CACHE_DIR}/colors"
+    export_xrdb      > "${WAL_CACHE_DIR}/colors.xresources"
+    export_putty     > "${WAL_CACHE_DIR}/colors.reg"
 }
 
 
@@ -325,7 +325,7 @@ export_colors() {
 
 reload_colors() {
     # Source the current sequences
-    sequences="$(< "${cache_dir}/sequences")"
+    sequences="$(< "${WAL_CACHE_DIR}/sequences")"
 
     # If vte mode was used, remove the problem sequence.
     [[ "$vte" == "on" ]] && sequences="${sequences/??\]708\;\#??????}"
@@ -365,7 +365,7 @@ cleanup_pid () {
 
 kill_old_wal () {
     # Create Cache Dir
-    mkdir -p "${cache_dir}/"
+    mkdir -p "${WAL_CACHE_DIR}/"
 
     # Kill old 'wal' instances found at $pid_file.
     if [[ -f "$pid_file" ]]; then
@@ -430,7 +430,7 @@ get_args() {
     while getopts ":a:cf:hi:no:qrtx" opt; do
         case "$opt" in
             "a") alpha="$OPTARG" ;;
-            "c") rm -rf "${cache_dir}/schemes"; exit ;;
+            "c") rm -rf "${WAL_CACHE_DIR}/schemes"; exit ;;
             "f")
                 [[ -f "$OPTARG" ]] && cache_file="$OPTARG"
                 [[ -z "$cache_file" ]] && cache_file="$(get_full_path "$OPTARG")"
