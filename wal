@@ -480,13 +480,15 @@ get_args() {
 main () {
     get_args "$@"
     kill_old_wal
-
     get_colors
-    send_sequences
-    set_wallpaper
-    export_colors
-    reload_xrdb
-    reload_env >/dev/null 2>&1
+
+    if [[ "$WAL_SET" != "False"  ]]; then
+        send_sequences
+        set_wallpaper
+        export_colors
+        reload_xrdb
+        reload_env >/dev/null 2>&1
+    fi
 
     # Set the locale back to the original value.
     export LC_ALL="$sys_locale"
